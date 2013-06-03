@@ -1,7 +1,7 @@
 package test;
 
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationService;;
+import com.edulify.modules.geolocation.GeolocationService;
 
 import org.fest.assertions.Assertions;
 import org.junit.AfterClass;

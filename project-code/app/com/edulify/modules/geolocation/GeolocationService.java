@@ -15,6 +15,7 @@ public class GeolocationService {
 
   protected static boolean useCache = Play.application().configuration().getBoolean("geolocation.useCache", true);
   protected static int cacheTTL     = Play.application().configuration().getInt("geolocation.cacheTTL", 3600);
+  protected static boolean debug    = Play.application().configuration().getBoolean("geolocation.debug", false);
 
   public static void useCache(boolean useCache) {
     GeolocationService.useCache = useCache;
@@ -40,9 +41,15 @@ public class GeolocationService {
                                    .setUrl(url);
 
     try {
+      if (debug) {
+        play.Logger.debug(String.format("requesting %s...", ip));
+      }
       WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
 
       String responseBody  = response.getBody();
+      if (debug) {
+        play.Logger.debug(String.format("response: %s", responseBody));
+      }
       if ("Not Found".equals(responseBody.trim())) {
         throw new InvalidAddressException(String.format("Invalid address: %s", ip));
       }
