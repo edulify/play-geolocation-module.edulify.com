@@ -1,0 +1,29 @@
+@(address: String,
+  ip: String,
+  countryCode: String,
+  countryName: String,
+  regionCode: String,
+  redionName: String,
+  city: String,
+  latitude: Double,
+  longitude: Double)
+
+<html>
+  <body>
+    @if(address != ip) {
+      <h2>data for @address</h2>
+    } else {
+      <h2>ip data</h2>
+    }
+    <ul>
+      <li><strong>ip:</strong> @ip</li>
+      <li><strong>country code:</strong> @countryCode</li>
+      <li><strong>country name:</strong> @countryName</li>
+      <li><strong>region code:</strong> @regionCode</li>
+      <li><strong>redion name:</strong> @redionName</li>
+      <li><strong>city:</strong> @city</li>
+      <li><strong>latitude:</strong> @latitude</li>
+      <li><strong>longitude:</strong> @longitude</li>
+    </ul>
+  </body>
+</html>
