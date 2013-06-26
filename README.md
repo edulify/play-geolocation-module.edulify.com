@@ -23,7 +23,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" % "geolocation_2.10" % "1.0.1
+    "com.edulify" % "geolocation_2.10" % "1.0.2
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
