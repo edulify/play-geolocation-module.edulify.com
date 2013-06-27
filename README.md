@@ -2,7 +2,9 @@
 
 This is a play module for IP based geolocation.
 
-Currently, the module is using the [freegeoip](http://freegeoip.net/) service to retrieve the IP data.
+Currently, the module supports use of one of the following service to retrieve the IP data:
+* [Freegeoip](http://freegeoip.net/) - Free web service for retrieve IP data
+* [Maxind GeoIP Country Web Service](https://www.maxmind.com/en/country) - Web service that retrieve the country of the given IP, with reliability of 99.98%
 
 ## Configuring
 
@@ -23,7 +25,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" % "geolocation_2.10" % "1.0.2
+    "com.edulify" % "geolocation_2.10" % "1.1.0
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -37,56 +39,64 @@ object ApplicationBuild extends Build {
 
 Don't forget to add the resolver to your list of resolvers, or it won't work!
 
-### Caching
-
-This module saves a cache of the data for the requested IPs. The default cache time to live is 3600 seconds (1 hour), but this time can be setted through the `conf` file, as show bellow.
-
-Also, you can set cache off, also through the `conf` file. **Warning**: by setting off the cache, you can overload your system (and the service) due to multiple requests. Without cache activated, every call to `GeolocationService.getGeolocate` will necessarily make a request to the choosen web service.
-
 ### Configurations
 
 In order to set the cache configurations, you must use the `application.conf` file, using the following keys:
 
 ```
 geolocation {
-  useCache  = true    # use cache (true | false)
-  cacheTTL  = 3600    # time in seconds that cache will be kept
+  useCache  = true                             # use cache (true | false)
+  cacheTTL  = 3600                             # time in seconds that cache will be kept
+  source    = FREEGEOIP                        # the web service that should be used for
+                                               # your IP queries (FREEGEOIP | GEOIP_COUNTRY)
+  # maxmind_license = yourMaxmindLicenseCode   # used only when the source is GEOIP_COUNTRY
 }
 ```
 
 You can also set the key `geolocation.debug` with a boolean value (true | false) in order to enable / disable the debug of requests. This debug will use the method `play.Logger.debug` to show in the *Play terminal* the requests made to the service and their responses.
 
+### Caching
+
+This module saves a cache of the data for the requested IPs. The default cache time to live is 3600 seconds (1 hour), but this time can be setted through the `conf` file, as shown above.
+
+Also, you can set cache off, also through the `conf` file. **Warning**: by setting off the cache, you can overload your system (and the service) due to multiple requests. Also, if you are using the Maxmind GeoIP service, cache off can waste your request quota. Without cache activated, every call to `GeolocationService.getGeolocate` will necessarily make a request to the choosen web service.
+
+
 ## Using
 
-To use this module, its enough to import it in your class and use the static method `GeolocationService.getGeolocation`. This call will return an object of the class `Geolocation`, and can throw an Exception of the class `InvalidAddressException` when the argument address is not valid.
+To use this module, its enough to import it in your class and use the static method `GeolocationService.getGeolocation`. This call will return an object of the class `Geolocation`, and can throw the following Exceptions:
+* `InvalidAddressException` - when the argument address is not valid.
+* `ServiceErrorException` - when the Web service response is not recognized.
 
 The `Geolocation` class has the following methods:
 
-##### getIp()
+##### *String* getIp()
 Returns the ip returned by the web service.
 
-##### getCountryCode()
+##### *String* getCountryCode()
 Returns the country code (with two letters) returned by the web service.
 
-##### getCountryName()
+##### *String* getCountryName()
 Returns the country name returned by the web service.
 
-##### getRegionCode()
+##### *String* getRegionCode()
 Returns the region code returned by the web service.
 
-##### getRegionName()
+##### *String* getRegionName()
 Returns the region name returned by the web service.
 
-##### getCity()
+##### *String* getCity()
 Returns the city returned by the web service.
 
-##### getLatitude()
+##### *double* getLatitude()
 Returns the latitude returned by the web service.
 
-##### getLongitude()
+##### *double* getLongitude()
 Returns the longitude returned by the web service.
 
 ----
+
+Note that all methods but `getIp()` and `getCountryCode()` will return `null` or `0` value when the source is *GEOIP_COUNTRY*.
 
 Example code:
 

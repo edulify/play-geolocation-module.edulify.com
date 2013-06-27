@@ -5,7 +5,7 @@ import play.Project._
 object ApplicationBuild extends Build {
 
   val appName         = "geolocation"
-  val appVersion      = "1.0.2"
+  val appVersion      = "1.1.0"
 
   val appDependencies = Seq(
     // Add your project dependencies here,

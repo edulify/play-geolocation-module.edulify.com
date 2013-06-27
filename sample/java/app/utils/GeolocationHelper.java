@@ -2,10 +2,14 @@ package utils;
 
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationService;
+import com.edulify.modules.geolocation.GeolocationService.Source;
 
 public class GeolocationHelper {
   public static boolean isReserved(String addr) {
-    return "RD".equals(getCountryCode(addr));
+    if (GeolocationService.source.equals(Source.FREEGEOIP)) {
+      return "RD".equals(getCountryCode(addr));
+    }
+    return false;
   }
 
   public static String getCountry(String addr) {

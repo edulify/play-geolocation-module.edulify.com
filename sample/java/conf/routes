@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index()
 GET     /country/:addr              controllers.Application.getCountry(addr: String)
+GET     /countryCode/:addr          controllers.Application.getCountryCode(addr: String)
 GET     /:addr                      controllers.Application.ipGeolocation(addr: String)
 
 # Map static resources from the /public folder to the /assets URL path

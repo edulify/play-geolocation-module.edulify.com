@@ -30,6 +30,20 @@ public class Application extends Controller {
       }
     }
 
+    public static Result getCountryCode(String addr) {
+      if (GeolocationHelper.isReserved(addr)) {
+        return ok(index.render("This ip is reserved."));
+      }
+      try {
+        String countryCode = GeolocationHelper.getCountryCode(addr);
+        String message     = countryCode != null ? String.format("This ip comes from %s", countryCode) :
+                                                   "Sorry, we couldn't connect to the webservice";
+        return ok(index.render(message));
+      } catch (InvalidAddressException ex) {
+        return ok("Invalid ip");
+      }
+    }
+
     public static Result ipGeolocation(String addr) {
       try {
 
