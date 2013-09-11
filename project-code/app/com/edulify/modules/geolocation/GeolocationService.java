@@ -10,6 +10,7 @@ import org.codehaus.jackson.JsonNode;
 import play.Play;
 import play.cache.Cache;
 import play.libs.WS;
+import play.Logger.ALogger;
 
 public class GeolocationService {
 
@@ -23,6 +24,8 @@ public class GeolocationService {
   protected static boolean debug         = Play.application().configuration().getBoolean("geolocation.debug", false);
   protected static String maxmindLicense = Play.application().configuration().getString("geolocation.maxmind_license", "");
   public static Source source            = Source.valueOf(Play.application().configuration().getString("geolocation.source", "FREEGEOIP"));
+
+  private static ALogger logger          = play.Logger.of("geolocation");
 
   public static void useCache(boolean useCache) {
     GeolocationService.useCache = useCache;
@@ -71,13 +74,13 @@ public class GeolocationService {
 
     try {
       if (debug) {
-        play.Logger.debug(String.format("requesting %s using freegeoip...", ip));
+        logger.debug(String.format("requesting %s using freegeoip...", ip));
       }
       WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
 
       String responseBody  = response.getBody();
       if (debug) {
-        play.Logger.debug(String.format("response: %s", responseBody));
+        logger.debug(String.format("response: %s", responseBody));
       }
       if ("Not Found".equals(responseBody.trim())) {
         throw new InvalidAddressException(String.format("Invalid address: %s", ip));
@@ -116,7 +119,7 @@ public class GeolocationService {
     } catch (InvalidAddressException ex) {
       throw ex;
     } catch (Exception ex) {
-      play.Logger.error("Exception ", ex);
+      logger.error("Exception ", ex);
       ex.printStackTrace();
     }
     return null;
@@ -128,13 +131,13 @@ public class GeolocationService {
                                    .setUrl(url);
     try {
       if (debug) {
-        play.Logger.debug(String.format("requesting %s using geoip_country...", ip));
+        logger.debug(String.format("requesting %s using geoip_country...", ip));
       }
       WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
 
       String responseBody  = response.getBody().trim();
       if (debug) {
-        play.Logger.debug(String.format("response: %s", responseBody));
+        logger.debug(String.format("response: %s", responseBody));
       }
       if ("(null),IP_NOT_FOUND".equals(responseBody)) {
         throw new InvalidAddressException(String.format("Invalid address: %s", ip));
@@ -153,7 +156,7 @@ public class GeolocationService {
     } catch (InvalidAddressException | ServiceErrorException ex) {
       throw ex;
     } catch (Exception ex) {
-      play.Logger.error("Exception ", ex);
+      logger.error("Exception ", ex);
       ex.printStackTrace();
     }
     return null;
