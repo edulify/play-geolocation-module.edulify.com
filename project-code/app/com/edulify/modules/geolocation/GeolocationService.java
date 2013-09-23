@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import play.Play;
-import play.cache.Cache;
 import play.libs.WS;
+import play.cache.Cache;
 import play.Logger.ALogger;
 
 public class GeolocationService {
@@ -108,14 +108,14 @@ public class GeolocationService {
         return null;
       }
 
-      return new Geolocation(jsonIp.getTextValue(),
-                             jsonCountryCode.getTextValue(),
-                             jsonCountryName.getTextValue(),
-                             jsonRegionCode.getTextValue(),
-                             jsonRegionName.getTextValue(),
-                             jsonCity.getTextValue(),
-                             jsonLatitude.getDoubleValue(),
-                             jsonLongitude.getDoubleValue());
+      return new Geolocation(jsonIp.asText(),
+                             jsonCountryCode.asText(),
+                             jsonCountryName.asText(),
+                             jsonRegionCode.asText(),
+                             jsonRegionName.asText(),
+                             jsonCity.asText(),
+                             jsonLatitude.asDouble(),
+                             jsonLongitude.asDouble());
     } catch (InvalidAddressException ex) {
       throw ex;
     } catch (Exception ex) {

@@ -5,11 +5,12 @@ import play.Project._
 object ApplicationBuild extends Build {
 
   val appName         = "geolocation"
-  val appVersion      = "1.1.1"
+  val appVersion      = "1.1.2"
 
   val appDependencies = Seq(
     // Add your project dependencies here,
-    javaCore
+    javaCore,
+    cache
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -17,5 +18,4 @@ object ApplicationBuild extends Build {
     publishArtifact in(Compile, packageDoc) := false,
     organization := "com.edulify"
   )
-
 }
