@@ -69,19 +69,19 @@ public class GeolocationService {
 
   private static Geolocation withFreegeoip(String ip) {
     String url = String.format("http://freegeoip.net/json/%s", ip);
-    WS.WSRequest wsRequest = new WS.WSRequest("GET")
-                                   .setUrl(url);
+    WS.WSRequest wsRequest = new WS.WSRequest("GET").setUrl(url);
 
     try {
-      if (debug) {
-        logger.debug(String.format("requesting %s using freegeoip...", ip));
-      }
+      if (debug) logger.debug(String.format("requesting %s using freegeoip...", ip));
+
       WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
 
+      if(response.getStatus() != 200)  return null;
+
       String responseBody  = response.getBody();
-      if (debug) {
-        logger.debug(String.format("response: %s", responseBody));
-      }
+
+      if (debug) logger.debug(String.format("response: %s", responseBody));
+
       if ("Not Found".equals(responseBody.trim())) {
         throw new InvalidAddressException(String.format("Invalid address: %s", ip));
       }
@@ -120,28 +120,28 @@ public class GeolocationService {
       throw ex;
     } catch (Exception ex) {
       logger.error("Exception ", ex);
-      ex.printStackTrace();
     }
     return null;
   }
 
   private static Geolocation withGeoIpCountry(String ip) {
     String url = String.format("https://geoip.maxmind.com/a?l=%s&i=%s", maxmindLicense, ip);
-    WS.WSRequest wsRequest = new WS.WSRequest("GET")
-                                   .setUrl(url);
+    WS.WSRequest wsRequest = new WS.WSRequest("GET").setUrl(url);
     try {
-      if (debug) {
-        logger.debug(String.format("requesting %s using geoip_country...", ip));
-      }
+
+      if (debug) logger.debug(String.format("requesting %s using geoip_country...", ip));
+
       WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
 
+      if(response.getStatus() != 200)  return null;
+
       String responseBody  = response.getBody().trim();
-      if (debug) {
-        logger.debug(String.format("response: %s", responseBody));
-      }
+      if (debug) logger.debug(String.format("response: %s", responseBody));
+
       if ("(null),IP_NOT_FOUND".equals(responseBody)) {
         throw new InvalidAddressException(String.format("Invalid address: %s", ip));
       }
+
       if (responseBody.length() == 2) {
         return new Geolocation(ip,
                                responseBody,
@@ -154,10 +154,10 @@ public class GeolocationService {
       }
       throw new ServiceErrorException(String.format("Unknown service response: %s", responseBody));
     } catch (InvalidAddressException | ServiceErrorException ex) {
+      logger.error("Exception ", ex);
       throw ex;
     } catch (Exception ex) {
       logger.error("Exception ", ex);
-      ex.printStackTrace();
     }
     return null;
   }
