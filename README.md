@@ -10,7 +10,7 @@ Currently, the module supports use of one of the following service to retrieve t
 
 The first step is include the geolocation in your dependencies list, in `Build.scala` file:
 
-```
+```scala
 import sbt._
 import Keys._
 import play.Project._
