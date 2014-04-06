@@ -12,12 +12,12 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" % "geolocation_2.10" % "1.1.2"
+    "com.edulify" % "geolocation_2.10" % "1.1.3"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here
-    resolvers += "Local Play Repository" at "file://home/ranieri/workspace/play/repository/local"
+    resolvers += "Edulify Repository" at "https://edulify.github.io/modules/releases/"
   )
 
 }

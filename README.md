@@ -25,12 +25,12 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" % "geolocation_2.10" % "1.1.0
+    "com.edulify" % "geolocation_2.10" % "1.1.3"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here
-    resolvers += Resolver.url("geolocation repository", url("http://blabluble.github.com/modules/releases/"))(Resolver.ivyStylePatterns)
+    resolvers += Resolver.url("Edulify Repository", url("http://edulify.github.com/modules/releases/"))(Resolver.ivyStylePatterns)
   )
 
 }
