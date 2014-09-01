@@ -1,11 +1,9 @@
-import play.Project._
-
 name := "geolocation"
 
 version := "1.1.3"
 
 libraryDependencies ++= Seq(
-  javaCore, cache
+  javaCore, javaWs, cache
 )
 
 resolvers ++= Seq(
@@ -63,5 +61,3 @@ pomExtra := (
   )
 
 scalacOptions := Seq("-feature", "-deprecation")
-
-playScalaSettings

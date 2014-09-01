@@ -7,8 +7,10 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import play.libs.ws.WS;
+import play.libs.ws.WSResponse;
+
 import play.Play;
-import play.libs.WS;
 import play.cache.Cache;
 import play.Logger.ALogger;
 
@@ -69,12 +71,11 @@ public class GeolocationService {
 
   private static Geolocation withFreegeoip(String ip) {
     String url = String.format("http://freegeoip.net/json/%s", ip);
-    WS.WSRequest wsRequest = new WS.WSRequest("GET").setUrl(url);
-
+    
     try {
       if (debug) logger.debug(String.format("requesting %s using freegeoip...", ip));
 
-      WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
+      WSResponse response = WS.url(url).get().get(5000l); // Don't wait more than 5 seconds for service response.
 
       if(response.getStatus() != 200)  return null;
 
@@ -126,12 +127,12 @@ public class GeolocationService {
 
   private static Geolocation withGeoIpCountry(String ip) {
     String url = String.format("https://geoip.maxmind.com/a?l=%s&i=%s", maxmindLicense, ip);
-    WS.WSRequest wsRequest = new WS.WSRequest("GET").setUrl(url);
+    
     try {
 
       if (debug) logger.debug(String.format("requesting %s using geoip_country...", ip));
 
-      WS.Response response = wsRequest.execute().get(5000l); // Don't wait more than 5 seconds for service response.
+      WSResponse response = WS.url(url).get().get(5000l); // Don't wait more than 5 seconds for service response.
 
       if(response.getStatus() != 200)  return null;
 
