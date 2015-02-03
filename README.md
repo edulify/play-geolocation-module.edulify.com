@@ -75,7 +75,7 @@ object ApplicationBuild extends Build {
 
 Add the following line in your `play.plugins` file:
 
-    1600:services.signals.SignalsPlugin
+    1600:com.edulify.modules.geolocation.GeolocationPlugin
 
 Use a number greater than `1000` since [play reserves this number to its own plugins](https://playframework.com/documentation/2.3.x/ScalaPlugins).
 
