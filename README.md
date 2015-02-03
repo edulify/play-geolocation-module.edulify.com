@@ -1,5 +1,7 @@
 # play-geolocation-module
 
+[![Build Status](https://travis-ci.org/edulify/play-geolocation-module.edulify.com.svg)](https://travis-ci.org/edulify/play-geolocation-module.edulify.com)
+
 This is a play module for IP based geolocation.
 
 Currently, the module supports use of one of the following service to retrieve the IP data:
