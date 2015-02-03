@@ -124,29 +124,40 @@ Returns the longitude returned by the web service.
 
 ----
 
-Note that all methods but `getIp()` and `getCountryCode()` will return `null` or `0` value when the source is *GEOIP_COUNTRY*.
+Note that all methods but `getIp()` and `getCountryCode()` will return an empty String or `0` value when the source is *GEOIP_COUNTRY*.
 
-Example code:
+
+### Sync Example code:
 
 ```java
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationService;
-import com.edulify.modules.geolocation.InvalidAddressException;
 
 public class Application {
   public static Result index() {
     ...
-    try {
-      Geolocation geolocation = GeolocationService.getGeolocation(request.remoteAddress());
-      if (geolocation == null) { // the service does not responded properly
-        return null;
-      }
-      if ("US".equals(geolocation.getCountryCode())) {
-        ...
-      }
-    } catch (InvalidAddressException ex) {
+    Geolocation geolocation = GeolocationService.getGeolocation(request.remoteAddress());
+    if ("US".equals(geolocation.getCountryCode())) {
       ...
     }
+    ...
+  }
+}
+```
+
+### Async Example Code
+
+```java
+import com.edulify.modules.geolocation.Geolocation;
+import com.edulify.modules.geolocation.AsyncGeolocationService;
+
+public class Application {
+  public static Result index() {
+    ...
+    Promise<Geolocation> promise = AsyncGeolocationService.getGeolocation(request.remoteAddress());
+    promise.map(new Function<Geolocation, Result>() {
+      ...
+    });
     ...
   }
 }
