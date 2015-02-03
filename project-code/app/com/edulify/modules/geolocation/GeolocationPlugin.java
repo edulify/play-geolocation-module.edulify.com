@@ -1,7 +1,13 @@
 package com.edulify.modules.geolocation;
 
+import play.Application;
+
 public class GeolocationPlugin extends play.Plugin {
-  
+
+  public GeolocationPlugin(Application application) {
+    // do nothing
+  }
+
   @Override
   public void onStart() {
     super.onStart();
