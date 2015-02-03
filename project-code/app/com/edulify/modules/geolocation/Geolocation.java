@@ -1,5 +1,7 @@
 package com.edulify.modules.geolocation;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Geolocation {
 
   private String ip;
@@ -10,7 +12,25 @@ public class Geolocation {
   private String city;
   private double latitude;
   private double longitude;
+  
+  public Geolocation(String ip, String countryCode) {
+    this.ip = ip;
+    this.countryCode = countryCode;
+  }
 
+  public Geolocation(String ip,
+                     String countryCode,
+                     String countryName,
+                     String regionCode,
+                     String regionName,
+                     String city) {
+    this(ip, countryCode);
+    this.countryName = countryName;
+    this.regionCode  = regionCode;
+    this.regionName  = regionName;
+    this.city        = city;
+  }
+  
   public Geolocation(String ip,
                      String countryCode,
                      String countryName,
@@ -19,15 +39,20 @@ public class Geolocation {
                      String city,
                      double latitude,
                      double longitude) {
-
-    this.ip          = ip;
-    this.countryCode = countryCode;
-    this.countryName = countryName;
-    this.regionCode  = regionCode;
-    this.regionName  = regionName;
-    this.city        = city;
+    this(ip, countryCode, countryName, regionCode, regionName, city);
     this.latitude    = latitude;
     this.longitude   = longitude;
+  }
+  
+  public static Geolocation empty() {
+    return new Geolocation(
+        "", // ip
+        "", // countryCode
+        "", // countryName
+        "", // regionCode
+        "", // regionName
+        ""  // city
+    );
   }
 
   public String getIp() {
@@ -64,15 +89,6 @@ public class Geolocation {
 
   @Override
   public String toString() {
-    return String.format("ip: %s, countryCode: %s, countryName: %s, regionCode: %s, regionName: %s, city: %s, latitude: %s, longitude: %s",
-                         this.ip,
-                         this.countryCode,
-                         this.countryName,
-                         this.regionCode,
-                         this.regionName,
-                         this.city,
-                         this.latitude,
-                         this.longitude);
+    return ToStringBuilder.reflectionToString(this);
   }
-
 }
