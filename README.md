@@ -8,7 +8,33 @@ Currently, the module supports use of one of the following service to retrieve t
 
 ## Configuring
 
-The first step is include the geolocation in your dependencies list, in `Build.scala` file:
+The first step is include the geolocation in your dependencies list, in your `build.sbt` or `project/Build.scala` file:
+
+#### `build.sbt`
+
+```scala
+name := "sitemapper-java-sample"
+
+version := "1.0-SNAPSHOT"
+
+lazy val root = (project in file(".")).enablePlugins(PlayJava)
+
+scalaVersion := "2.11.5"
+
+libraryDependencies ++= Seq(
+  // Add your project dependencies here,
+  javaCore,
+  javaJdbc,
+  javaEbean,
+  "com.edulify" %% "geolocation" % "1.3.0"
+)
+
+resolvers ++= Seq(
+  Resolver.url("Edulify Repository", url("https://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
+)
+```
+
+#### `project/Build.scala`
 
 ```scala
 import sbt._
@@ -25,7 +51,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" %% "geolocation_2.10" % "1.2.0"
+    "com.edulify" %% "geolocation" % "1.3.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
