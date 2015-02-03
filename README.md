@@ -126,10 +126,9 @@ public class Application {
   public static Result index() {
     ...
     Promise<Geolocation> promise = AsyncGeolocationService.getGeolocation(request.remoteAddress());
-    promise.map(new Function<Geolocation, Result>() {
+    return promise.map(new Function<Geolocation, Result>() {
       ...
     });
-    ...
   }
 }
 ```
@@ -146,10 +145,7 @@ public class Application {
   public static Result index() {
     ...
     Geolocation geolocation = GeolocationService.getGeolocation(request.remoteAddress());
-    if ("US".equals(geolocation.getCountryCode())) {
-      ...
-    }
-    ...
+    return ok(viewGeolocation.render(geolocation));
   }
 }
 ```
