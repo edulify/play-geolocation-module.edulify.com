@@ -17,7 +17,7 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "geolocation-sample"
+  val appName         = "geolocation-java-sample"
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
