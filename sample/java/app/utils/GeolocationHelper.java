@@ -6,10 +6,7 @@ import com.edulify.modules.geolocation.GeolocationService.Source;
 
 public class GeolocationHelper {
   public static boolean isReserved(String addr) {
-    if (GeolocationService.source.equals(Source.FREEGEOIP)) {
-      return "RD".equals(getCountryCode(addr));
-    }
-    return false;
+    return GeolocationService.source.equals(Source.FREEGEOIP) && "".equals(getCountryCode(addr));
   }
 
   public static String getCountry(String addr) {

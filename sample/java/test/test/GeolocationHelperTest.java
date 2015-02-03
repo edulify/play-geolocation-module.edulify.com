@@ -90,5 +90,4 @@ public class GeolocationHelperTest {
     Assertions.assertThat(GeolocationHelper.getGeolocation("1.2.3.4").getLatitude()).isEqualTo(10.0);
     Assertions.assertThat(GeolocationHelper.getGeolocation("1.2.3.4").getLongitude()).isEqualTo(20.0);
   }
-
 }
