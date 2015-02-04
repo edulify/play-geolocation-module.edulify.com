@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
   javaCore,
   javaJdbc,
   javaEbean,
-  "com.edulify" %% "geolocation" % "1.4.0-SNAPSHOT"
+  "com.edulify" %% "geolocation" % "1.4.0"
 )
 
 resolvers ++= Seq(
