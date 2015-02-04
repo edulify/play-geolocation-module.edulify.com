@@ -71,7 +71,7 @@ object ApplicationBuild extends Build {
 
 ```
 
-## Add plugin class to your `project/play.plugins`:
+#### Add plugin class to your `project/play.plugins`:
 
 Add the following line in your `play.plugins` file:
 
