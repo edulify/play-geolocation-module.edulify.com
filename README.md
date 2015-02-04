@@ -1,4 +1,4 @@
-# play-geolocation-module
+# Play Geolocation Plugin
 
 [![Build Status](https://travis-ci.org/edulify/play-geolocation-module.edulify.com.svg)](https://travis-ci.org/edulify/play-geolocation-module.edulify.com)
 
@@ -34,7 +34,7 @@ libraryDependencies ++= Seq(
   javaCore,
   javaJdbc,
   javaEbean,
-  "com.edulify" %% "geolocation" % "1.3.0"
+  "com.edulify" %% "geolocation" % "1.4.0"
 )
 
 resolvers ++= Seq(
@@ -59,7 +59,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" %% "geolocation" % "1.3.0"
+    "com.edulify" %% "geolocation" % "1.4.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
