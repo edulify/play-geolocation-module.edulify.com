@@ -12,7 +12,8 @@ public class Geolocation {
   private String city;
   private double latitude;
   private double longitude;
-  
+  private String timeZone;
+
   public Geolocation(String ip, String countryCode) {
     this.ip = ip;
     this.countryCode = countryCode;
@@ -38,10 +39,12 @@ public class Geolocation {
                      String regionName,
                      String city,
                      double latitude,
-                     double longitude) {
+                     double longitude,
+                     String timeZone) {
     this(ip, countryCode, countryName, regionCode, regionName, city);
     this.latitude    = latitude;
     this.longitude   = longitude;
+    this.timeZone    = timeZone;
   }
   
   public static Geolocation empty() {
@@ -85,6 +88,10 @@ public class Geolocation {
 
   public double getLongitude() {
     return this.longitude;
+  }
+
+  public String getTimeZone() {
+    return this.timeZone;
   }
 
   @Override

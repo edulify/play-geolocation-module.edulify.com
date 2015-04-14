@@ -55,7 +55,8 @@ public class Application extends Controller {
         geolocation.getRegionName(),
         geolocation.getCity(),
         geolocation.getLatitude(),
-        geolocation.getLongitude()));
+        geolocation.getLongitude(),
+        geolocation.getTimeZone()));
   }
 
   public static F.Promise<Result> asyncCountry(final String addr) {
@@ -97,7 +98,8 @@ public class Application extends Controller {
                 geolocation.getRegionName(),
                 geolocation.getCity(),
                 geolocation.getLatitude(),
-                geolocation.getLongitude()));
+                geolocation.getLongitude(),
+                geolocation.getTimeZone()));
           }
         });
   }
