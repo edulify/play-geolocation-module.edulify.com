@@ -40,6 +40,7 @@ public class FreegeoipProvider implements GeolocationProvider {
     JsonNode jsonCity        = json.get("city");
     JsonNode jsonLatitude    = json.get("latitude");
     JsonNode jsonLongitude   = json.get("longitude");
+    JsonNode jsonTimeZone    = json.get("time_zone");
 
     if (jsonIp          == null ||
         jsonCountryCode == null ||
@@ -48,7 +49,8 @@ public class FreegeoipProvider implements GeolocationProvider {
         jsonRegionName  == null ||
         jsonCity        == null ||
         jsonLatitude    == null ||
-        jsonLongitude   == null) {
+        jsonLongitude   == null ||
+        jsonTimeZone    == null) {
       return Geolocation.empty();
     }
 
@@ -60,7 +62,8 @@ public class FreegeoipProvider implements GeolocationProvider {
         jsonRegionName.asText(),
         jsonCity.asText(),
         jsonLatitude.asDouble(),
-        jsonLongitude.asDouble()
+        jsonLongitude.asDouble(),
+        jsonTimeZone.asText()
     );
   }
 }
