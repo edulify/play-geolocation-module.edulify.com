@@ -34,7 +34,7 @@ libraryDependencies ++= Seq(
   javaCore,
   javaJdbc,
   javaEbean,
-  "com.edulify" %% "geolocation" % "1.4.0"
+  "com.edulify" %% "geolocation" % "1.4.1"
 )
 
 resolvers ++= Seq(
@@ -59,7 +59,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.edulify" %% "geolocation" % "1.4.0"
+    "com.edulify" %% "geolocation" % "1.4.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
