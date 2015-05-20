@@ -14,7 +14,7 @@ public class GeolocationCache {
   
   public static Geolocation get(String ip) {
     if (!cacheOn) return null;
-    return (Geolocation) Cache.get(ip);
+    return (Geolocation) Cache.get(key(ip));
   }
   
   private static String key(String ip) {
