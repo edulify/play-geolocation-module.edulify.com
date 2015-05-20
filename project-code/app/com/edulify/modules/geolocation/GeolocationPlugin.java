@@ -16,7 +16,6 @@ public class GeolocationPlugin extends play.Plugin {
       play.Logger.info("Starting GeolocationPlugin with provider " + providerClass);
       GeolocationProvider provider = (GeolocationProvider) providerClass.newInstance();
       AsyncGeolocationService.initialize(provider);
-      GeolocationService.initialize(provider);
     } catch (ClassNotFoundException ex) {
       throw new RuntimeException("Could not initialize GeolocationPlugin. Check if class configured in geolocation.provider exists", ex);
     } catch (InstantiationException ex) {
