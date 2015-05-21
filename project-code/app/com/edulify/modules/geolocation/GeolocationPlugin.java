@@ -1,5 +1,6 @@
 package com.edulify.modules.geolocation;
 
+import com.edulify.modules.geolocation.providers.FreegeoipProvider;
 import play.Application;
 
 public class GeolocationPlugin extends play.Plugin {
@@ -12,7 +13,7 @@ public class GeolocationPlugin extends play.Plugin {
   public void onStart() {
     super.onStart();
     try {
-      Class<?> providerClass = Class.forName(Config.getStringOr("geolocation.provider", ""));
+      Class<?> providerClass = Class.forName(Config.getStringOr("geolocation.provider", FreegeoipProvider.class.getCanonicalName()));
       play.Logger.info("Starting GeolocationPlugin with provider " + providerClass);
       GeolocationProvider provider = (GeolocationProvider) providerClass.newInstance();
       AsyncGeolocationService.initialize(provider);
