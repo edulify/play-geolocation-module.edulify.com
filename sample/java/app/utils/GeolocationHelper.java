@@ -1,7 +1,6 @@
 package utils;
 
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationService;
 
 public class GeolocationHelper {
   public static boolean isReserved(String addr) {
@@ -9,10 +8,10 @@ public class GeolocationHelper {
   }
 
   private static String getCountryCode(String addr) {
-    Geolocation geolocation = GeolocationService.getGeolocation(addr);
-    if (geolocation == null) {
+//    Geolocation geolocation = //GeolocationService.getGeolocation(addr);
+//    if (geolocation == null) {
       return null;
-    }
-    return geolocation.getCountryCode();
+//    }
+//    return geolocation.getCountryCode();
   }
 }
