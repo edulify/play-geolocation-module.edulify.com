@@ -46,17 +46,6 @@ public class Geolocation {
     this.longitude   = longitude;
     this.timeZone    = timeZone;
   }
-  
-  public static Geolocation empty() {
-    return new Geolocation(
-        "", // ip
-        "", // countryCode
-        "", // countryName
-        "", // regionCode
-        "", // regionName
-        ""  // city
-    );
-  }
 
   public String getIp() {
     return this.ip;

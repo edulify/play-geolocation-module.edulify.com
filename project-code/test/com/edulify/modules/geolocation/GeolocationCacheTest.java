@@ -24,14 +24,15 @@ public class GeolocationCacheTest extends WithApplication {
   public void testSetGet() throws Exception {
     Map<String, Object> configMap = new HashMap<>(1);
     configMap.put("geolocation.cache.on", true);
-    running(fakeApplication(configMap), new Runnable() {
-      @Override
-      public void run() {
-        String ipAddress = "192.168.0.1";
-        when(mockGeolocation.getIp()).thenReturn(ipAddress);
-        GeolocationCache.set(mockGeolocation);
-        assertSame(mockGeolocation, GeolocationCache.get(ipAddress));
-      }
-    });
+    running(fakeApplication(configMap), this::testRun);
+  }
+
+  private void testRun()
+  {
+    final String ipAddress = "192.168.0.1";
+    when(mockGeolocation.getIp()).thenReturn(ipAddress);
+    GeolocationCache service = new GeolocationCache();
+    service.set(mockGeolocation);
+    assertSame(mockGeolocation, service.get(ipAddress));
   }
 }

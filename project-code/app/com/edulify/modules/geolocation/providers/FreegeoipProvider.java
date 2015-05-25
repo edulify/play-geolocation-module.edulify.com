@@ -1,36 +1,39 @@
 package com.edulify.modules.geolocation.providers;
 
 import com.edulify.modules.geolocation.Geolocation;
+import com.edulify.modules.geolocation.GeolocationFactory;
 import com.edulify.modules.geolocation.GeolocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
-import play.libs.F;
-import play.libs.ws.WS;
-import play.libs.ws.WSResponse;
+import play.libs.F.Promise;
+import play.libs.ws.WSClient;
+import play.mvc.Http;
 
 public class FreegeoipProvider implements GeolocationProvider {
-  
-  @Override
-  public F.Promise<Geolocation> get(String ip) {
-    String url = String.format("http://freegeoip.net/json/%s", ip);
-    return WS.url(url)
-        .get()
-        .map(new F.Function<WSResponse, JsonNode>() {
-          @Override
-          public JsonNode apply(WSResponse response) throws Throwable {
-            if (response.getStatus() != 200) return null;
-            if (response.getBody().contains("not found")) return null;
-            return response.asJson();
-          }
-        })
-        .map(new F.Function<JsonNode, Geolocation>() {
-          @Override
-          public Geolocation apply(JsonNode json) throws Throwable {
-            if (json == null) return Geolocation.empty();
-            return asGeolocation(json);
-          }
-        });
+  private static final String SERVICE_URL_INDEX = "http://freegeoip.net/json/";
+  private static final String RESPONSE_NOT_FOUND = "not found";
+
+  private final WSClient wsClient;
+  private final GeolocationFactory factory;
+
+  public FreegeoipProvider(WSClient wsClient, GeolocationFactory factory) {
+    this.wsClient = wsClient;
+    this.factory = factory;
   }
-  
+
+  @Override
+  public Promise<Geolocation> get(final String ip) {
+    String url = SERVICE_URL_INDEX + ip;
+    return wsClient.url(url)
+        .get()
+        .map(response -> {
+          if (response.getStatus() != Http.Status.OK) return null;
+          String body = response.getBody();
+          if (body.contains(RESPONSE_NOT_FOUND)) return null;
+          return response.asJson();
+        })
+        .map(json -> json == null ? factory.create() : asGeolocation(json));
+  }
+
   private Geolocation asGeolocation(JsonNode json) {
     JsonNode jsonIp          = json.get("ip");
     JsonNode jsonCountryCode = json.get("country_code");
@@ -51,10 +54,10 @@ public class FreegeoipProvider implements GeolocationProvider {
         jsonLatitude    == null ||
         jsonLongitude   == null ||
         jsonTimeZone    == null) {
-      return Geolocation.empty();
+      return factory.create();
     }
 
-    return new Geolocation(
+    return factory.create(
         jsonIp.asText(),
         jsonCountryCode.asText(),
         jsonCountryName.asText(),
