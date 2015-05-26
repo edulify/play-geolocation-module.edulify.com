@@ -1,6 +1,6 @@
 package com.edulify.modules.geolocation;
 
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -9,9 +9,8 @@ import play.libs.F.Promise;
 import play.test.WithApplication;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
 import static play.test.Helpers.*;
 
@@ -25,42 +24,57 @@ public class GeolocationServiceTest extends WithApplication {
   private GeolocationCache cache;
   @Mock
   private GeolocationProvider provider;
+  @Mock
+  private Geolocation geolocation;
+
+  @Before
+  public void setUp() throws Exception {
+    initMocks(this);
+  }
 
   @Test
   public void testGetGeolocationRunWithNull() throws Exception {
-
+    running(fakeApplication(), this::runWithNull);
   }
 
-  public void runWithNull() {
-    verify(cache, never());
-    verify(provider, never());
+  private void runWithNull() {
     GeolocationService service = new GeolocationService(cache, provider);
     Promise<Geolocation> geolocationPromise = service.getGeolocation(null);
-    geolocationPromise.onRedeem(Assert::assertNull);
+    Geolocation retrieved = geolocationPromise.get(5000);
+    assertNull(retrieved);
+    verify(cache, never()).get(null);
+    verify(cache, never()).set(null);
+    verify(provider, never()).get(null);
   }
 
-  public void runWithEmptyString() {
-    verify(cache, never());
-    verify(provider, never());
+  @Test
+  public void testGetGeolocationWithEmptyString() throws Exception {
+    running(fakeApplication(), this::runWithEmptyString);
+  }
+
+  private void runWithEmptyString() {
     GeolocationService service = new GeolocationService(cache, provider);
     Promise<Geolocation> geolocationPromise = service.getGeolocation("");
-    geolocationPromise.onRedeem(Assert::assertNull);
+    Geolocation retrieved = geolocationPromise.get(5000);
+    assertNull(retrieved);
+    verify(cache, never()).get("");
+    verify(cache, never()).set(null);
+    verify(provider, never()).get("");
   }
 
   @Test
   public void testGetGeolocationHappyPath() throws Exception {
     when(cache.get("192.30.252.129")).thenReturn(null);
-    Geolocation geolocation = new Geolocation("192.30.252.129", "**");
     Promise<Geolocation> geolocationPromise = pure(geolocation);
     when(provider.get("192.30.252.129")).thenReturn(geolocationPromise);
     running(fakeApplication(), this::runHappyPath);
   }
 
-  public void runHappyPath() {
-    String ipAddress = "192.30.252.129";
+  private void runHappyPath() {
     GeolocationService service = new GeolocationService(cache, provider);
-    Promise<Geolocation> geolocationPromise = service.getGeolocation(ipAddress);
+    Promise<Geolocation> geolocationPromise = service.getGeolocation("192.30.252.129");
     Geolocation retrieved = geolocationPromise.get(5000);
-    assertEquals(ipAddress, retrieved.getIp());
+    assertSame(geolocation, retrieved);
+    verify(cache, times(1)).set(geolocation);
   }
 }

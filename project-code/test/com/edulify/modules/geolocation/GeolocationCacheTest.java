@@ -18,8 +18,10 @@ import static org.junit.Assert.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class GeolocationCacheTest extends WithApplication {
+
   @Mock
   private Geolocation mockGeolocation;
+
   @Test
   public void testSetGet() throws Exception {
     Map<String, Object> configMap = new HashMap<>(1);

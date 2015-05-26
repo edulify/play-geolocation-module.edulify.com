@@ -1,6 +1,6 @@
 package com.edulify.modules.geolocation;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public class Geolocation {
 
@@ -14,24 +14,6 @@ public class Geolocation {
   private double longitude;
   private String timeZone;
 
-  public Geolocation(String ip, String countryCode) {
-    this.ip = ip;
-    this.countryCode = countryCode;
-  }
-
-  public Geolocation(String ip,
-                     String countryCode,
-                     String countryName,
-                     String regionCode,
-                     String regionName,
-                     String city) {
-    this(ip, countryCode);
-    this.countryName = countryName;
-    this.regionCode  = regionCode;
-    this.regionName  = regionName;
-    this.city        = city;
-  }
-  
   public Geolocation(String ip,
                      String countryCode,
                      String countryName,
@@ -41,7 +23,12 @@ public class Geolocation {
                      double latitude,
                      double longitude,
                      String timeZone) {
-    this(ip, countryCode, countryName, regionCode, regionName, city);
+    this.ip = ip;
+    this.countryCode = countryCode;
+    this.countryName = countryName;
+    this.regionCode  = regionCode;
+    this.regionName  = regionName;
+    this.city        = city;
     this.latitude    = latitude;
     this.longitude   = longitude;
     this.timeZone    = timeZone;
@@ -85,6 +72,6 @@ public class Geolocation {
 
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this);
+    return reflectionToString(this);
   }
 }

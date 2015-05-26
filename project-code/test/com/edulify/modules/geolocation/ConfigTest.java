@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class ConfigTest {
 
@@ -19,6 +20,30 @@ public class ConfigTest {
       public void run() {
         boolean value = Config.getBooleanOr("geolocation.cache.on", false);
         assertThat(value).isTrue();
+      }
+    });
+  }
+
+  @Test
+  public void should_return_a_string_configuration_when_it_exists() {
+    Map<String, Object> config = new HashMap<>(1);
+    config.put("geolocation.anyKey", "anyValue");
+    Helpers.running(Helpers.fakeApplication(config), new Runnable() {
+      @Override
+      public void run() {
+        String value = Config.getStringOr("geolocation.anyKey", "noValue");
+        assertEquals("anyValue", value);
+      }
+    });
+  }
+
+  @Test
+  public void should_return_a_string_alternative_when_configuration_key_do_not_exists() {
+    Helpers.running(Helpers.fakeApplication(), new Runnable() {
+      @Override
+      public void run() {
+        String value = Config.getStringOr("geolocation.anyKey", "noValue");
+        assertEquals("noValue", value);
       }
     });
   }

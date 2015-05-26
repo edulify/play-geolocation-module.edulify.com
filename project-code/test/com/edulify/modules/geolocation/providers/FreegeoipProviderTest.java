@@ -66,9 +66,9 @@ public class FreegeoipProviderTest extends WithApplication {
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles")).thenReturn(geolocation);
-    verify(factory, never()).create();
 
     running(fakeApplication(), this::doRunTest);
+    verify(factory, never()).create();
   }
 
   private void doRunTest() {
@@ -93,37 +93,37 @@ public class FreegeoipProviderTest extends WithApplication {
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
-    verify(factory, never()).create("192.30.252.129", "US");
 
     running(fakeApplication(), this::doRunTest);
+    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
+    verify(factory, never()).create("192.30.252.129", "US");
   }
 
   @Test
   public void testGetNoContent() throws Exception {
     when(response.getBody()).thenReturn("not found");
     when(response.getStatus()).thenReturn(Http.Status.OK);
-    verify(response, never()).asJson();
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
 
     running(fakeApplication(), this::doRunTest);
+    verify(response, never()).asJson();
+    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
   }
 
   @Test
   public void testGetBadCode() throws Exception {
-    verify(response, never()).getBody();
     when(response.getStatus()).thenReturn(Http.Status.SERVICE_UNAVAILABLE);
-    verify(response, never()).asJson();
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
 
     running(fakeApplication(), this::doRunTest);
+    verify(response, never()).getBody();
+    verify(response, never()).asJson();
+    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
   }
 }

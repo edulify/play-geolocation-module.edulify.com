@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <bean id="wsClient" class="play.libs.ws.WS" factory-method="client"/>
+  <bean id="geolocationFactory" class="com.edulify.modules.geolocation.GeolocationFactory"/>
+  <bean id="geolocationProvider" class="com.edulify.modules.geolocation.providers.FreegeoipProvider">
+    <constructor-arg ref="wsClient"/>
+    <constructor-arg ref="geolocationFactory"/>
+  </bean>
+  <bean id="geolocationCache" class="com.edulify.modules.geolocation.GeolocationCache"/>
+  <bean id="geolocationService" class="com.edulify.modules.geolocation.GeolocationService">
+    <constructor-arg ref="geolocationCache"/>
+    <constructor-arg ref="geolocationProvider"/>
+  </bean>
+  <bean id="applicationController" class="controllers.Application">
+    <constructor-arg ref="geolocationService"/>
+  </bean>
+</beans>
