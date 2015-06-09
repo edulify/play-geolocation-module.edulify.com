@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import play.test.WithApplication;
 
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
@@ -12,7 +13,7 @@ import static org.junit.Assert.*;
  * Created by sovaalexandr
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GeolocationCacheTest {
+public class GeolocationCacheTest extends WithApplication {
 
   @Mock
   private Geolocation mockGeolocation;
