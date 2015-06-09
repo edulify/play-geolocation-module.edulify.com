@@ -27,7 +27,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   // Add your project dependencies here,
@@ -37,6 +37,8 @@ libraryDependencies ++= Seq(
 resolvers ++= Seq(
   Resolver.url("Edulify Repository", url("https://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
 )
+
+routesGenerator := InjectedRoutesGenerator
 ```
 
 #### `project/Build.scala`
@@ -67,42 +69,37 @@ object ApplicationBuild extends Build {
 
 #### Setup your application DI container:
 
-If you using `Spring IoC` for DI configuration could be following
+Add `GeolocationProvider` binding to your Guice module
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans.xsd">
-  <bean id="wsClient" class="play.libs.ws.WS" factory-method="client"/>
-  <bean id="geolocationFactory" class="com.edulify.modules.geolocation.GeolocationFactory"/>
-  <bean id="geolocationProvider" class="com.edulify.modules.geolocation.providers.FreegeoipProvider">
-    <constructor-arg ref="wsClient"/>
-    <constructor-arg ref="geolocationFactory"/>
-  </bean>
-  <bean id="geolocationCache" class="com.edulify.modules.geolocation.GeolocationCache"/>
-  <bean id="geolocationService" class="com.edulify.modules.geolocation.GeolocationService">
-    <constructor-arg ref="geolocationCache"/>
-    <constructor-arg ref="geolocationProvider"/>
-  </bean>
-  <bean id="applicationController" class="controllers.Application">
-    <constructor-arg ref="geolocationService"/>
-  </bean>
-</beans>
+```java
+public class SampleModule extends AbstractModule {
+  @Override
+  protected void configure() {
+    try {
+      //.... Your configuration here
+      bind(GeolocationProvider.class).toConstructor(FreegeoipProvider.class.getConstructor(WSClient.class, GeolocationFactory.class));
+    } catch (NoSuchMethodException e) {
+      addError(e);
+    }
+  }
+}
 ```
-
-Than [configure project to use DI](https://www.playframework.com/documentation/2.3.x/JavaInjection).
 
 ## Configurations
 
-This plugins offers the following configurations:
+Enable Geolocation module with your module at `conf/application.conf`:
+
+```
+play.modules.enabled += "modules.SampleModule"
+play.modules.enabled += "com.edulify.modules.geolocation.GeolocationModule"
+```
+
+This module offers the following configurations:
 
 | Configuration           | Description                             | Default           |
 |:------------------------|:----------------------------------------|:------------------|
 | `geolocation.cache.on`  | Caches geolocation results calls        | `false`           |
 | `geolocation.cache.ttl` | How long it should cache the results    | none              |
-| `geolocation.enabled`   | If the plugin is enabled or not         | `true`            |
 | `geolocation.maxmind.license` | Maxmind license                   | none              |
 
 
@@ -123,12 +120,6 @@ Also, notice that the cache uses the cache support offered by Playframework.
 
 ## Code example
 
-Right now there is support to both async and sync geolocation calls, both using [the Play WS API](https://playframework.com/documentation/2.3.x/JavaWS). 
-
-### Async Example Code
-
-This is the expected way to use the plugin.
-
 ```java
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationService;
@@ -142,31 +133,9 @@ public class Application {
   public Result index() {
     ...
     Promise<Geolocation> promise = geolocationService.getGeolocation(request.remoteAddress());
-    return promise.map(new Function<Geolocation, Result>() {
+    return promise.map(result -> {
       ...
     });
-  }
-}
-```
-
-### Sync Example code (DEPRECATED):
-
-This will be removed in a future release and it is exists just to keep compatibility.
-
-```java
-import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationService;
-
-public class Application {
-  private final GeolocationService geolocationService;
-
-  public Application(GeolocationService geolocationService) {
-    this.geolocationService = geolocationService;
-  }
-  public static Result index() {
-    ...
-    Geolocation geolocation = geolocationService.getGeolocation(request.remoteAddress()).get(5000);
-    return ok(viewGeolocation.render(geolocation));
   }
 }
 ```
@@ -192,10 +161,10 @@ public class MyGeolocationProvider implements GeolocationProvider {
 }
 ```
 
-After that, you just have to configure the provider for DI container
+After that, you just have to configure the provider for DI container:
 
-```xml
-    <bean id="geolocationProvider" class="com.acme.geolocation.MyGeolocationProvider" />
+```java
+    bind(GeolocationProvider.class).to(MyGeolocationProvider.class);
 ```
 
 Things like cache and timeouts will work seamless.

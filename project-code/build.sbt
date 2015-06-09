@@ -2,18 +2,13 @@ name := "geolocation"
 
 version := "2.0.0"
 
-scalaVersion := "2.11.5"
-
-crossScalaVersions := Seq("2.10.4", "2.11.5")
+scalaVersion := "2.11.6"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 libraryDependencies ++= Seq(
-  javaCore, javaWs, cache
-)
-
-resolvers ++= Seq(
-  Resolver.typesafeRepo("releases")
+  javaCore, javaWs, cache,
+  "org.mockito" % "mockito-core" % "2.0.13-beta" % "test"
 )
 
 organization := "com.edulify"
@@ -38,7 +33,7 @@ publishTo := {
 
 startYear := Some(2013)
 
-description := "This is a geolocation library for Playframework."
+description := "This is a geolocation module for Playframework."
 
 licenses := Seq("The Apache Software License, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 

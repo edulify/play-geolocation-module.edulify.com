@@ -6,19 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import play.libs.F.Promise;
-import play.test.WithApplication;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
-import static play.test.Helpers.*;
-
 /**
  * Created by sowhat
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GeolocationServiceTest extends WithApplication {
+public class GeolocationServiceTest {
 
   @Mock
   private GeolocationCache cache;
@@ -34,10 +31,6 @@ public class GeolocationServiceTest extends WithApplication {
 
   @Test
   public void testGetGeolocationRunWithNull() throws Exception {
-    running(fakeApplication(), this::runWithNull);
-  }
-
-  private void runWithNull() {
     GeolocationService service = new GeolocationService(cache, provider);
     Promise<Geolocation> geolocationPromise = service.getGeolocation(null);
     Geolocation retrieved = geolocationPromise.get(5000);
@@ -49,10 +42,6 @@ public class GeolocationServiceTest extends WithApplication {
 
   @Test
   public void testGetGeolocationWithEmptyString() throws Exception {
-    running(fakeApplication(), this::runWithEmptyString);
-  }
-
-  private void runWithEmptyString() {
     GeolocationService service = new GeolocationService(cache, provider);
     Promise<Geolocation> geolocationPromise = service.getGeolocation("");
     Geolocation retrieved = geolocationPromise.get(5000);
@@ -67,12 +56,8 @@ public class GeolocationServiceTest extends WithApplication {
     when(cache.get("192.30.252.129")).thenReturn(null);
     Promise<Geolocation> geolocationPromise = pure(geolocation);
     when(provider.get("192.30.252.129")).thenReturn(geolocationPromise);
-    running(fakeApplication(), this::runHappyPath);
-  }
-
-  private void runHappyPath() {
     GeolocationService service = new GeolocationService(cache, provider);
-    Promise<Geolocation> geolocationPromise = service.getGeolocation("192.30.252.129");
+    geolocationPromise = service.getGeolocation("192.30.252.129");
     Geolocation retrieved = geolocationPromise.get(5000);
     assertSame(geolocation, retrieved);
     verify(cache, times(1)).set(geolocation);

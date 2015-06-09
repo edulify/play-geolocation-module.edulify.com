@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   // Add your project dependencies here,
@@ -14,3 +14,5 @@ libraryDependencies ++= Seq(
 resolvers ++= Seq(
   Resolver.url("Edulify Repository", url("https://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
 )
+
+routesGenerator := InjectedRoutesGenerator

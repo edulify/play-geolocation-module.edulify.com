@@ -15,7 +15,6 @@ import play.libs.ws.WSClient;
 import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
-import play.test.WithApplication;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,7 +32,7 @@ import static org.junit.Assert.assertSame;
  * Created by sowhat
  */
 @RunWith(MockitoJUnitRunner.class)
-public class FreegeoipProviderTest extends WithApplication {
+public class FreegeoipProviderTest {
 
   @Mock
   private WSClient wsClient;
@@ -67,7 +66,7 @@ public class FreegeoipProviderTest extends WithApplication {
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles")).thenReturn(geolocation);
 
-    running(fakeApplication(), this::doRunTest);
+    doRunTest();
     verify(factory, never()).create();
   }
 
@@ -94,7 +93,7 @@ public class FreegeoipProviderTest extends WithApplication {
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
 
-    running(fakeApplication(), this::doRunTest);
+    doRunTest();
     verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
     verify(factory, never()).create("192.30.252.129", "US");
   }
@@ -108,7 +107,7 @@ public class FreegeoipProviderTest extends WithApplication {
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
 
-    running(fakeApplication(), this::doRunTest);
+    doRunTest();
     verify(response, never()).asJson();
     verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
   }
@@ -121,7 +120,7 @@ public class FreegeoipProviderTest extends WithApplication {
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
 
-    running(fakeApplication(), this::doRunTest);
+    doRunTest();
     verify(response, never()).getBody();
     verify(response, never()).asJson();
     verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");

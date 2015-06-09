@@ -13,7 +13,6 @@ import play.libs.ws.WSClient;
 import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
-import play.test.WithApplication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,7 @@ import static play.test.Helpers.running;
  * Created by sowhat
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MaxmindProviderTest extends WithApplication {
+public class MaxmindProviderTest {
 
   @Mock
   private WSClient wsClient;
@@ -59,9 +58,7 @@ public class MaxmindProviderTest extends WithApplication {
     when(wsClient.url("https://geoip.maxmind.com/a?l=someLicenseKey&i=192.30.252.129")).thenReturn(requestHolder);
     when(factory.create("192.30.252.129", "US")).thenReturn(geolocation);
 
-    Map<String, Object> configMap = new HashMap<>(1);
-    configMap.put("geolocation.maxmind.license", "someLicenseKey");
-    running(fakeApplication(configMap), this::doRunTest);
+    doRunTest();
 
     verify(factory, never()).create();
   }
@@ -76,9 +73,7 @@ public class MaxmindProviderTest extends WithApplication {
     when(wsClient.url("https://geoip.maxmind.com/a?l=someLicenseKey&i=192.30.252.129")).thenReturn(requestHolder);
     when(factory.create()).thenReturn(geolocation);
 
-    Map<String, Object> configMap = new HashMap<>(1);
-    configMap.put("geolocation.maxmind.license", "someLicenseKey");
-    running(fakeApplication(configMap), this::doRunTest);
+    doRunTest();
 
     verify(factory, never()).create("192.30.252.129", "US");
   }
@@ -93,13 +88,11 @@ public class MaxmindProviderTest extends WithApplication {
     when(factory.create()).thenReturn(geolocation);
     verify(factory, never()).create("192.30.252.129", "US");
 
-    Map<String, Object> configMap = new HashMap<>(1);
-    configMap.put("geolocation.maxmind.license", "someLicenseKey");
-    running(fakeApplication(configMap), this::doRunTest);
+    doRunTest();
   }
 
   private void doRunTest() {
-    GeolocationProvider provider = new MaxmindProvider(wsClient, factory);
+    GeolocationProvider provider = new MaxmindProvider(wsClient, factory, "someLicenseKey");
     Promise<Geolocation> geolocationPromise = provider.get("192.30.252.129");
     Geolocation retrieved = geolocationPromise.get(5000);
     assertSame(geolocation, retrieved);

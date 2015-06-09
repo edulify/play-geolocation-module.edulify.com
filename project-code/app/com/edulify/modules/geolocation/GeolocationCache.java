@@ -2,17 +2,14 @@ package com.edulify.modules.geolocation;
 
 import play.cache.Cache;
 
-import static com.edulify.modules.geolocation.Config.getBooleanOr;
-import static com.edulify.modules.geolocation.Config.getMillisecondsOr;
-
 public class GeolocationCache {
 
   private final boolean cacheOn;
   private final long cacheTtl;
 
-  public GeolocationCache() {
-    cacheOn = getBooleanOr("geolocation.cache.on", false);
-    cacheTtl = getMillisecondsOr("geolocation.cache.ttl", 5000);
+  public GeolocationCache(boolean cacheOn, long cacheTtl) {
+    this.cacheOn = cacheOn;
+    this.cacheTtl = cacheTtl;
   }
 
   public void set(Geolocation geolocation) {

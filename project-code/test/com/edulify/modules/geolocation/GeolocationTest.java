@@ -1,7 +1,6 @@
 package com.edulify.modules.geolocation;
 
 import org.junit.Test;
-import play.test.WithApplication;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
