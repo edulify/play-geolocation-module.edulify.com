@@ -1,23 +1,21 @@
 package com.edulify.modules.geolocation.providers;
 
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationFactory;
 import com.edulify.modules.geolocation.GeolocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.F.Promise;
 import play.libs.ws.WSClient;
 import play.mvc.Http;
 
-public class FreegeoipProvider implements GeolocationProvider {
+public class FreegeoipProvider implements GeolocationProvider, WSProvider {
   private static final String SERVICE_URL_INDEX = "http://freegeoip.net/json/";
   private static final String RESPONSE_NOT_FOUND = "not found";
 
-  private final WSClient wsClient;
-  private final GeolocationFactory factory;
+  private WSClient wsClient;
 
-  public FreegeoipProvider(WSClient wsClient, GeolocationFactory factory) {
-    this.wsClient = wsClient;
-    this.factory = factory;
+  @Override
+  public void setClient(WSClient client) {
+    this.wsClient = client;
   }
 
   @Override
@@ -31,7 +29,7 @@ public class FreegeoipProvider implements GeolocationProvider {
           if (body.contains(RESPONSE_NOT_FOUND)) return null;
           return response.asJson();
         })
-        .map(json -> json == null ? factory.create() : asGeolocation(json));
+        .map(json -> json == null ? new Geolocation() : asGeolocation(json));
   }
 
   private Geolocation asGeolocation(JsonNode json) {
@@ -54,10 +52,10 @@ public class FreegeoipProvider implements GeolocationProvider {
         jsonLatitude    == null ||
         jsonLongitude   == null ||
         jsonTimeZone    == null) {
-      return factory.create();
+      return new Geolocation();
     }
 
-    return factory.create(
+    return new Geolocation(
         jsonIp.asText(),
         jsonCountryCode.asText(),
         jsonCountryName.asText(),

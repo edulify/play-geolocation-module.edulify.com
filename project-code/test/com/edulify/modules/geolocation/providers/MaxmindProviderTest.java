@@ -1,20 +1,20 @@
 package com.edulify.modules.geolocation.providers;
 
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationFactory;
-import com.edulify.modules.geolocation.GeolocationProvider;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import play.Configuration;
 import play.libs.F.Promise;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSRequestHolder;
+import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,9 +27,7 @@ public class MaxmindProviderTest {
   @Mock
   private WSClient wsClient;
   @Mock
-  private GeolocationFactory factory;
-  @Mock
-  private WSRequestHolder requestHolder;
+  private WSRequest requestHolder;
   @Mock
   private WSResponse response;
   @Mock
@@ -48,11 +46,8 @@ public class MaxmindProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("https://geoip.maxmind.com/a?l=someLicenseKey&i=192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create("192.30.252.129", "US")).thenReturn(geolocation);
 
-    doRunTest();
-
-    verify(factory, never()).create();
+    doRunTest(new Geolocation("192.30.252.129", "US"));
   }
 
   @Test
@@ -63,30 +58,28 @@ public class MaxmindProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("https://geoip.maxmind.com/a?l=someLicenseKey&i=192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create()).thenReturn(geolocation);
 
-    doRunTest();
-
-    verify(factory, never()).create("192.30.252.129", "US");
+    doRunTest(new Geolocation());
   }
 
   @Test
   public void testGetBadCode() throws Exception {
-    verify(response, never()).getBody();
     when(response.getStatus()).thenReturn(Http.Status.SERVICE_UNAVAILABLE);
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("https://geoip.maxmind.com/a?l=someLicenseKey&i=192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create()).thenReturn(geolocation);
-    verify(factory, never()).create("192.30.252.129", "US");
 
-    doRunTest();
+    doRunTest(new Geolocation());
+
+    verify(response, never()).getBody();
   }
 
-  private void doRunTest() {
-    GeolocationProvider provider = new MaxmindProvider(wsClient, factory, "someLicenseKey");
+  private void doRunTest(Geolocation expected) {
+    MaxmindProvider provider = new MaxmindProvider();
+    provider.setClient(wsClient);
+    provider.useConfiguration(new Configuration(ImmutableMap.of("geolocation.maxmind.license", "someLicenseKey")));
     Promise<Geolocation> geolocationPromise = provider.get("192.30.252.129");
     Geolocation retrieved = geolocationPromise.get(5000);
-    assertSame(geolocation, retrieved);
+    assertEquals(expected, retrieved);
   }
 }

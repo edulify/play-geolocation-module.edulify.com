@@ -1,8 +1,6 @@
 package com.edulify.modules.geolocation.providers;
 
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationFactory;
-import com.edulify.modules.geolocation.GeolocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,19 +10,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 import play.libs.F.Promise;
 import play.libs.Json;
 import play.libs.ws.WSClient;
-import play.libs.ws.WSRequestHolder;
+import play.libs.ws.WSRequest;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
-import static org.junit.Assert.assertSame;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FreegeoipProviderTest {
@@ -32,9 +31,7 @@ public class FreegeoipProviderTest {
   @Mock
   private WSClient wsClient;
   @Mock
-  private GeolocationFactory factory;
-  @Mock
-  private WSRequestHolder requestHolder;
+  private WSRequest requestHolder;
   @Mock
   private WSResponse response;
   @Mock
@@ -59,17 +56,16 @@ public class FreegeoipProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles")).thenReturn(geolocation);
-
-    doRunTest();
-    verify(factory, never()).create();
+    doRunTest(new Geolocation("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles"));
   }
 
-  private void doRunTest() {
-    GeolocationProvider provider = new FreegeoipProvider(wsClient, factory);
+  private void doRunTest(Geolocation expected) {
+    FreegeoipProvider provider = new FreegeoipProvider();
+    provider.setClient(wsClient);
     Promise<Geolocation> geolocationPromise = provider.get("192.30.252.129");
     Geolocation retrieved = geolocationPromise.get(5000);
-    assertSame(geolocation, retrieved);
+    assertNotNull(retrieved);
+    assertEquals(expected, retrieved);
   }
 
   @Test
@@ -86,11 +82,8 @@ public class FreegeoipProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create()).thenReturn(geolocation);
 
-    doRunTest();
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
-    verify(factory, never()).create("192.30.252.129", "US");
+    doRunTest(new Geolocation());
   }
 
   @Test
@@ -100,11 +93,9 @@ public class FreegeoipProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create()).thenReturn(geolocation);
 
-    doRunTest();
+    doRunTest(new Geolocation());
     verify(response, never()).asJson();
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
   }
 
   @Test
@@ -113,11 +104,9 @@ public class FreegeoipProviderTest {
     Promise<WSResponse> responsePromise = pure(response);
     when(requestHolder.get()).thenReturn(responsePromise);
     when(wsClient.url("http://freegeoip.net/json/192.30.252.129")).thenReturn(requestHolder);
-    when(factory.create()).thenReturn(geolocation);
 
-    doRunTest();
+    doRunTest(new Geolocation());
     verify(response, never()).getBody();
     verify(response, never()).asJson();
-    verify(factory, never()).create("192.30.252.129", "US", "United States", "CA", "California", "San Francisco", 37.77, -122.394, "America/Los_Angeles");
   }
 }
