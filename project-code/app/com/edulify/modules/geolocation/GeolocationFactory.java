@@ -1,8 +1,5 @@
 package com.edulify.modules.geolocation;
 
-/**
- * Created by sowhat
- */
 public class GeolocationFactory {
   public Geolocation create(String ip,
                             String countryCode,

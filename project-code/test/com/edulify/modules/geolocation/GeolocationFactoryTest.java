@@ -5,9 +5,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
-/**
- * Created by sowhat
- */
 public class GeolocationFactoryTest {
 
   private GeolocationFactory factory = new GeolocationFactory();

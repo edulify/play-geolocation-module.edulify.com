@@ -14,21 +14,13 @@ import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
 
-/**
- * Created by sowhat
- */
 @RunWith(MockitoJUnitRunner.class)
 public class MaxmindProviderTest {
 

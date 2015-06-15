@@ -5,9 +5,6 @@ import com.google.inject.Provides;
 import play.Configuration;
 import play.Environment;
 
-/**
- * Created by sowhat
- */
 public class GeolocationModule extends AbstractModule {
 
     private final Environment environment;

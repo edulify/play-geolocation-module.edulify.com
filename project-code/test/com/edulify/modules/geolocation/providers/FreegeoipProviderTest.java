@@ -24,13 +24,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
 import static org.junit.Assert.assertSame;
 
-/**
- * Created by sowhat
- */
 @RunWith(MockitoJUnitRunner.class)
 public class FreegeoipProviderTest {
 

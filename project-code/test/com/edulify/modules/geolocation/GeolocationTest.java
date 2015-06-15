@@ -5,9 +5,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
-/**
- * Created by sowhat
- */
 public class GeolocationTest {
 
   private static final double DELTA = .000001;

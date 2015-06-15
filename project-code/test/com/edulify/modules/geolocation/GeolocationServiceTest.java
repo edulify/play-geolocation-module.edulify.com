@@ -11,9 +11,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static play.libs.F.Promise.pure;
-/**
- * Created by sowhat
- */
+
 @RunWith(MockitoJUnitRunner.class)
 public class GeolocationServiceTest {
 

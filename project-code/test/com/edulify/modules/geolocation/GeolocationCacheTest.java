@@ -9,9 +9,6 @@ import play.test.WithApplication;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
 
-/**
- * Created by sovaalexandr
- */
 @RunWith(MockitoJUnitRunner.class)
 public class GeolocationCacheTest extends WithApplication {
 
