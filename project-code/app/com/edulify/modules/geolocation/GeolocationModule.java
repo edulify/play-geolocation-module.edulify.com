@@ -7,11 +7,10 @@ import play.Environment;
 
 public class GeolocationModule extends AbstractModule {
 
-    private final Environment environment;
     private final Configuration configuration;
 
+    @SuppressWarnings("unused")
     public GeolocationModule(Environment environment, Configuration configuration) {
-        this.environment = environment;
         this.configuration = configuration;
     }
 
