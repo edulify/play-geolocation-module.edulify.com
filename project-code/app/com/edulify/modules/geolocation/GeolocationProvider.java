@@ -6,6 +6,8 @@ public interface GeolocationProvider {
 
   /**
    * Get the geolocation to a given ip
+   * @param ip IP to locate
+   * @return Geolocation
    */
   F.Promise<Geolocation> get(String ip);
 }

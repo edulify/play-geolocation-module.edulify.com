@@ -75,12 +75,14 @@ Add `GeolocationProvider` binding to your Guice module
 public class SampleModule extends AbstractModule {
   @Override
   protected void configure() {
-    try {
-      //.... Your configuration here
-      bind(GeolocationProvider.class).toConstructor(FreegeoipProvider.class.getConstructor(WSClient.class, GeolocationFactory.class));
-    } catch (NoSuchMethodException e) {
-      addError(e);
-    }
+  }
+  @Provides
+  @Inject
+  private GeolocationProvider geolocationProvider(WSClient client)
+  {
+    FreegeoipProvider provider = new FreegeoipProvider();
+    provider.setClient(client);
+    return provider;
   }
 }
 ```
@@ -98,8 +100,10 @@ This module offers the following configurations:
 
 | Configuration           | Description                             | Default           |
 |:------------------------|:----------------------------------------|:------------------|
+| `geolocation.provider`  | The geolocation provider implementation | `com.edulify.modules.geolocation.providers.FreegeoipProvider` |
 | `geolocation.cache.on`  | Caches geolocation results calls        | `false`           |
 | `geolocation.cache.ttl` | How long it should cache the results    | none              |
+| `geolocation.enabled`   | If the plugin is enabled or not         | `true`            |
 | `geolocation.maxmind.license` | Maxmind license                   | none              |
 
 

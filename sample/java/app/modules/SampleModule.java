@@ -1,9 +1,10 @@
 package modules;
 
-import com.edulify.modules.geolocation.GeolocationFactory;
 import com.edulify.modules.geolocation.GeolocationProvider;
 import com.edulify.modules.geolocation.providers.FreegeoipProvider;
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provides;
 import play.libs.ws.WSClient;
 
 /**
@@ -12,10 +13,14 @@ import play.libs.ws.WSClient;
 public class SampleModule extends AbstractModule {
   @Override
   protected void configure() {
-    try {
-      bind(GeolocationProvider.class).toConstructor(FreegeoipProvider.class.getConstructor(WSClient.class, GeolocationFactory.class));
-    } catch (NoSuchMethodException e) {
-      addError(e);
-    }
+  }
+
+  @Provides
+  @Inject
+  private GeolocationProvider geolocationProvider(WSClient client)
+  {
+    FreegeoipProvider provider = new FreegeoipProvider();
+    provider.setClient(client);
+    return provider;
   }
 }
