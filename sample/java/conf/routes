@@ -3,14 +3,10 @@
 # ~~~~
 
 # Home page
-GET        /                               controllers.Application.index()
-GET        /sync/country/name/:addr        controllers.Application.syncCountry(addr: String)
-GET        /sync/country/code/:addr        controllers.Application.syncCountryCode(addr: String)
-GET        /sync/:addr                     controllers.Application.syncGeolocation(addr: String)
-
-GET        /async/country/name/:addr       controllers.Application.asyncCountry(addr: String)
-GET        /async/country/code/:addr       controllers.Application.asyncCountryCode(addr: String)
-GET        /async/:addr                    controllers.Application.asyncGeolocation(addr: String)
+GET        /                          controllers.Application.index()
+GET        /country/name/:addr        controllers.Application.getCountry(addr: String)
+GET        /country/code/:addr        controllers.Application.getCountryCode(addr: String)
+GET        /:addr                     controllers.Application.getGeolocation(addr: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)
