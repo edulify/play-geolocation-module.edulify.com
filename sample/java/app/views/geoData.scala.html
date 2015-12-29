@@ -1,32 +1,20 @@
-@(address: String,
-  ip: String,
-  countryCode: String,
-  countryName: String,
-  regionCode: String,
-  redionName: String,
-  city: String,
-  latitude: Double,
-  longitude: Double,
-  timezone: String)
+@(location: com.edulify.modules.geolocation.Geolocation)
 
 <html>
   <body>
-    @if(address != ip) {
-      <h2>data for @address</h2>
-    } else {
-      <h2>ip data</h2>
+    @if(location != null) {
+      <h2>data for @location.getIp</h2>
+      <ul>
+        <li><strong>ip:</strong> @location.getIp</li>
+        <li><strong>country code:</strong> @location.getCountryCode</li>
+        <li><strong>country name:</strong> @location.getCountryName</li>
+        <li><strong>region code:</strong> @location.getRegionCode</li>
+        <li><strong>region name:</strong> @location.getRegionName</li>
+        <li><strong>city:</strong> @location.getCity</li>
+        <li><strong>latitude:</strong> @location.getLatitude</li>
+        <li><strong>longitude:</strong> @location.getLongitude</li>
+        <li><strong>timezone:</strong> @location.getTimeZone</li>
+      </ul>
     }
-    <ul>
-      <li><strong>ip:</strong> @ip</li>
-      <li><strong>country code:</strong> @countryCode</li>
-      <li><strong>country name:</strong> @countryName</li>
-      <li><strong>region code:</strong> @regionCode</li>
-      <li><strong>redion name:</strong> @redionName</li>
-      <li><strong>city:</strong> @city</li>
-      <li><strong>latitude:</strong> @latitude</li>
-      <li><strong>longitude:</strong> @longitude</li>
-      <li><strong>timezone:</strong> @timezone</li>
-
-    </ul>
   </body>
 </html>

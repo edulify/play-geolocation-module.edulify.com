@@ -55,16 +55,7 @@ public class Application extends Controller {
             String countryCode = geolocation.getCountryCode();
             String message = countryCode != null ? String.format("This ip comes from %s", countryCode) :
                 "Sorry, we couldn't connect to the webservice";
-            return ok(geoData.render(addr,
-                geolocation.getIp(),
-                geolocation.getCountryCode(),
-                geolocation.getCountryName(),
-                geolocation.getRegionCode(),
-                geolocation.getRegionName(),
-                geolocation.getCity(),
-                geolocation.getLatitude(),
-                geolocation.getLongitude(),
-                geolocation.getTimeZone()));
+            return ok(geoData.render(geolocation));
           }
         });
   }
