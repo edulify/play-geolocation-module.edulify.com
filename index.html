@@ -1,41 +1,30 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Play Geolocation Module by edulify</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Play Geolocation Module</h1>
-        <p class="header">This is a play module for IP based geolocation</p>
+    <section class="page-header">
+      <h1 class="project-name">Play Geolocation Module</h1>
+      <h2 class="project-tagline">This is a play module for IP based geolocation</h2>
+      <a href="https://github.com/edulify/play-geolocation-module.edulify.com" class="btn">View on GitHub</a>
+      <a href="https://github.com/edulify/play-geolocation-module.edulify.com/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/edulify/play-geolocation-module.edulify.com/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/edulify/play-geolocation-module.edulify.com/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/edulify/play-geolocation-module.edulify.com/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/edulify/play-geolocation-module.edulify.com">View On GitHub</a></li>
-        </ul>
-
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/edulify">edulify</a></p>
-
-
-      </header>
-      <section>
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="play-geolocation-plugin" class="anchor" href="#play-geolocation-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Play Geolocation Plugin</h1>
 
 <p><a href="https://travis-ci.org/edulify/play-geolocation-module.edulify.com"><img src="https://travis-ci.org/edulify/play-geolocation-module.edulify.com.svg" alt="Build Status"></a></p>
 
-<p>This is a play module for IP based geolocation. Currently, the module supports use of one of the following service to retrieve the IP data:</p>
+<p>This is a play module for IP based <a href="https://en.wikipedia.org/wiki/Geolocation">Geolocation</a>. Currently, the module supports the following services to retrieve the IP data:</p>
 
 <h4>
 <a id="freegeoip" class="anchor" href="#freegeoip" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="http://freegeoip.net/">Freegeoip</a>
@@ -56,6 +45,40 @@
 <p>However, support to other geolocation services is possible using the API provided by this plugin.</p>
 
 <h2>
+<a id="compatibility-matrix" class="anchor" href="#compatibility-matrix" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compatibility Matrix</h2>
+
+<table>
+<thead>
+<tr>
+<th align="left">Playframework version</th>
+<th align="left">Module version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">2.4.x</td>
+<td align="left">2.0.0</td>
+</tr>
+<tr>
+<td align="left">2.3.x</td>
+<td align="left">1.4.1</td>
+</tr>
+<tr>
+<td align="left">2.3.x</td>
+<td align="left">1.4.0</td>
+</tr>
+<tr>
+<td align="left">2.3.x</td>
+<td align="left">1.3.0</td>
+</tr>
+<tr>
+<td align="left">2.3.x</td>
+<td align="left">1.2.0</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use</h2>
 
 <p>The first step is include the the dependency in your <code>build.sbt</code> or <code>project/Build.scala</code> file:</p>
@@ -64,64 +87,64 @@
 <a id="buildsbt" class="anchor" href="#buildsbt" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>build.sbt</code>
 </h4>
 
-<div class="highlight highlight-scala"><pre>name <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>sitemapper-java-sample<span class="pl-pds">"</span></span>
+<div class="highlight highlight-source-scala"><pre>name <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>sitemapper-java-sample<span class="pl-pds">"</span></span>
 
-version <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>1.0-SNAPSHOT<span class="pl-pds">"</span></span>
+version <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1.0-SNAPSHOT<span class="pl-pds">"</span></span>
 
-<span class="pl-s">lazy</span> <span class="pl-k">val</span> <span class="pl-en">root</span> <span class="pl-k">=</span> (project in file(<span class="pl-s1"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span>)).enablePlugins(<span class="pl-en">PlayJava</span>)
+<span class="pl-k">lazy</span> <span class="pl-k">val</span> <span class="pl-en">root</span> <span class="pl-k">=</span> (project in file(<span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-pds">"</span></span>)).enablePlugins(<span class="pl-en">PlayJava</span>)
 
-scalaVersion <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>2.11.5<span class="pl-pds">"</span></span>
+scalaVersion <span class="pl-k">:</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>2.11.5<span class="pl-pds">"</span></span>
 
 libraryDependencies <span class="pl-k">++</span><span class="pl-k">=</span> <span class="pl-en">Seq</span>(
   <span class="pl-c">// Add your project dependencies here,</span>
   javaCore,
   javaJdbc,
-  javaEbean,
-  <span class="pl-s1"><span class="pl-pds">"</span>com.edulify<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>geolocation<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>1.4.0<span class="pl-pds">"</span></span>
+  <span class="pl-s"><span class="pl-pds">"</span>com.edulify<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s"><span class="pl-pds">"</span>geolocation<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>2.0.0<span class="pl-pds">"</span></span>
 )
 
 resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="pl-en">Seq</span>(
-  <span class="pl-en">Resolver</span>.url(<span class="pl-s1"><span class="pl-pds">"</span>Edulify Repository<span class="pl-pds">"</span></span>, url(<span class="pl-s1"><span class="pl-pds">"</span>https://edulify.github.io/modules/releases/<span class="pl-pds">"</span></span>))(<span class="pl-en">Resolver</span>.ivyStylePatterns)
+  <span class="pl-en">Resolver</span>.url(<span class="pl-s"><span class="pl-pds">"</span>Edulify Repository<span class="pl-pds">"</span></span>, url(<span class="pl-s"><span class="pl-pds">"</span>https://edulify.github.io/modules/releases/<span class="pl-pds">"</span></span>))(<span class="pl-en">Resolver</span>.ivyStylePatterns)
 )</pre></div>
 
 <h4>
 <a id="projectbuildscala" class="anchor" href="#projectbuildscala" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>project/Build.scala</code>
 </h4>
 
-<div class="highlight highlight-scala"><pre><span class="pl-k">import</span> <span class="pl-v">sbt.</span><span class="pl-v">_</span>
+<div class="highlight highlight-source-scala"><pre><span class="pl-k">import</span> <span class="pl-v">sbt.</span><span class="pl-v">_</span>
 <span class="pl-k">import</span> <span class="pl-v">Keys.</span><span class="pl-v">_</span>
 <span class="pl-k">import</span> <span class="pl-v">play.Project.</span><span class="pl-v">_</span>
 
 <span class="pl-k">object</span> <span class="pl-en">ApplicationBuild</span> <span class="pl-k">extends</span> <span class="pl-e">Build</span> {
 
-  <span class="pl-k">val</span> <span class="pl-en">appName</span>         <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>geolocation-java-sample<span class="pl-pds">"</span></span>
-  <span class="pl-k">val</span> <span class="pl-en">appVersion</span>      <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>1.0-SNAPSHOT<span class="pl-pds">"</span></span>
+  <span class="pl-k">val</span> <span class="pl-en">appName</span>         <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>geolocation-java-sample<span class="pl-pds">"</span></span>
+  <span class="pl-k">val</span> <span class="pl-en">appVersion</span>      <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1.0-SNAPSHOT<span class="pl-pds">"</span></span>
 
   <span class="pl-k">val</span> <span class="pl-en">appDependencies</span> <span class="pl-k">=</span> <span class="pl-en">Seq</span>(
     <span class="pl-c">// Add your project dependencies here,</span>
     javaCore,
     javaJdbc,
-    javaEbean,
-    <span class="pl-s1"><span class="pl-pds">"</span>com.edulify<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>geolocation<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>1.4.0<span class="pl-pds">"</span></span>
+    <span class="pl-s"><span class="pl-pds">"</span>com.edulify<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s"><span class="pl-pds">"</span>geolocation<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>2.0.0<span class="pl-pds">"</span></span>
   )
 
   <span class="pl-k">val</span> <span class="pl-en">main</span> <span class="pl-k">=</span> play.<span class="pl-en">Project</span>(appName, appVersion, appDependencies).settings(
     <span class="pl-c">// Add your own project settings here</span>
-    resolvers <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-en">Resolver</span>.url(<span class="pl-s1"><span class="pl-pds">"</span>Edulify Repository<span class="pl-pds">"</span></span>, url(<span class="pl-s1"><span class="pl-pds">"</span>https://edulify.github.io/modules/releases/<span class="pl-pds">"</span></span>))(<span class="pl-en">Resolver</span>.ivyStylePatterns)
+    resolvers <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-en">Resolver</span>.url(<span class="pl-s"><span class="pl-pds">"</span>Edulify Repository<span class="pl-pds">"</span></span>, url(<span class="pl-s"><span class="pl-pds">"</span>https://edulify.github.io/modules/releases/<span class="pl-pds">"</span></span>))(<span class="pl-en">Resolver</span>.ivyStylePatterns)
   )
 
-}
-</pre></div>
+}</pre></div>
 
 <h4>
-<a id="add-plugin-class-to-your-projectplayplugins" class="anchor" href="#add-plugin-class-to-your-projectplayplugins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add plugin class to your <code>project/play.plugins</code>:</h4>
+<a id="enable-the-module-in-your-confapplicationconf" class="anchor" href="#enable-the-module-in-your-confapplicationconf" aria-hidden="true"><span class="octicon octicon-link"></span></a>Enable the module in your <code>conf/application.conf</code>:</h4>
 
-<p>Add the following line in your <code>play.plugins</code> file:</p>
+<p>Since there is support to Freegeoip and Maxmind, there is also two modules that you enable, depending on which one you want to use. To eanble the module, just add the following line to you <code>conf/application.conf</code> file:</p>
 
-<pre><code>1600:com.edulify.modules.geolocation.GeolocationPlugin
+<pre><code>play.modules.enabled += "com.edulify.modules.geolocation.providers.FreegeoipModule"
 </code></pre>
 
-<p>Use a number greater than <code>1000</code> since <a href="https://playframework.com/documentation/2.3.x/ScalaPlugins">play reserves this number to its own plugins</a>.</p>
+<p>Or, in case you want to use Maxmind instead:</p>
+
+<pre><code>play.modules.enabled += "com.edulify.modules.geolocation.providers.MaxmindModule"
+</code></pre>
 
 <h2>
 <a id="configurations" class="anchor" href="#configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurations</h2>
@@ -138,11 +161,6 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>geolocation.provider</code></td>
-<td align="left">The geolocation provider implementation</td>
-<td align="left"><code>com.edulify.modules.geolocation.providers.FreegeoipProvider</code></td>
-</tr>
-<tr>
 <td align="left"><code>geolocation.cache.on</code></td>
 <td align="left">Caches geolocation results calls</td>
 <td align="left"><code>false</code></td>
@@ -150,17 +168,12 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 <tr>
 <td align="left"><code>geolocation.cache.ttl</code></td>
 <td align="left">How long it should cache the results</td>
-<td align="left">none</td>
+<td align="left">5 seconds</td>
 </tr>
 <tr>
 <td align="left"><code>geolocation.enabled</code></td>
 <td align="left">If the plugin is enabled or not</td>
 <td align="left"><code>true</code></td>
-</tr>
-<tr>
-<td align="left"><code>geolocation.timeout</code></td>
-<td align="left">How long it should waits to retrieve the geolocation</td>
-<td align="left"><code>5s</code></td>
 </tr>
 <tr>
 <td align="left"><code>geolocation.maxmind.license</code></td>
@@ -173,8 +186,6 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 <p>Per instance, you can add the following in your <code>conf/application.conf</code>:</p>
 
 <pre><code>geolocation {
-  provider = "com.edulify.modules.geolocation.providers.MaxmindProvider"
-  timeout = 1s
   cache {
     on = true
     ttl = 10s
@@ -183,53 +194,55 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 }
 </code></pre>
 
-<p>Also, notice that the cache uses the cache support offered by Playframework.</p>
+<p>Also, notice that the cache uses the cache support offered by Playframework. A complete configuration can be found below:</p>
+
+<pre><code>play.modules.enabled += "com.edulify.modules.geolocation.providers.FreegeoipModule"
+
+geolocation {
+  cache {
+    on = true
+    ttl = 10s
+  }
+}
+</code></pre>
 
 <h2>
 <a id="code-example" class="anchor" href="#code-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code example</h2>
 
-<p>Right now there is support to both async and sync geolocation calls, both using <a href="https://playframework.com/documentation/2.3.x/JavaWS">the Play WS API</a>. </p>
-
-<h3>
-<a id="async-example-code" class="anchor" href="#async-example-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Async Example Code</h3>
-
 <p>This is the expected way to use the plugin.</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.Geolocation</span>;
-<span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.AsyncGeolocationService</span>;
+<div class="highlight highlight-source-java"><pre><span class="pl-k">import</span> <span class="pl-smi">javax.inject.Inject</span>;
 
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">Application</span> {
-  <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-stj">Result</span> <span class="pl-en">index</span>() {
-    <span class="pl-c1">...</span>
-    <span class="pl-st">Promise&lt;<span class="pl-stj">Geolocation</span>&gt;</span> promise <span class="pl-k">=</span> <span class="pl-stj">AsyncGeolocationService</span><span class="pl-k">.</span>getGeolocation(request<span class="pl-k">.</span>remoteAddress());
-    <span class="pl-k">return</span> promise<span class="pl-k">.</span>map(<span class="pl-k">new</span> <span class="pl-st">Function&lt;<span class="pl-stj">Geolocation</span>, <span class="pl-stj">Result</span>&gt;</span>() {
-      <span class="pl-c1">...</span>
-    });
-  }
-}</pre></div>
-
-<h3>
-<a id="sync-example-code-deprecated" class="anchor" href="#sync-example-code-deprecated" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sync Example code (DEPRECATED):</h3>
-
-<p>This will be removed in a future release and it is exists just to keep compatibility.</p>
-
-<div class="highlight highlight-java"><pre><span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.Geolocation</span>;
+<span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.Geolocation</span>;
 <span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.GeolocationService</span>;
 
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">Application</span> {
-  <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-stj">Result</span> <span class="pl-en">index</span>() {
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Application</span> {
+
+  <span class="pl-k">private</span> <span class="pl-smi">GeolocationService</span> geolocationService;
+
+  <span class="pl-k">@Inject</span>
+  <span class="pl-k">public</span> <span class="pl-en">Application</span>(<span class="pl-smi">GeolocationService</span> <span class="pl-v">geolocationService</span>) {
+    <span class="pl-v">this</span><span class="pl-k">.</span>geolocationService <span class="pl-k">=</span> geolocationService;
+  }
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">Result</span> <span class="pl-en">index</span>() {
     <span class="pl-c1">...</span>
-    <span class="pl-stj">Geolocation</span> geolocation <span class="pl-k">=</span> <span class="pl-stj">GeolocationService</span><span class="pl-k">.</span>getGeolocation(request<span class="pl-k">.</span>remoteAddress());
-    <span class="pl-k">return</span> ok(viewGeolocation<span class="pl-k">.</span>render(geolocation));
+    <span class="pl-k">Promise&lt;<span class="pl-smi">Geolocation</span>&gt;</span> promise <span class="pl-k">=</span> geolocationService<span class="pl-k">.</span>getGeolocation(request<span class="pl-k">.</span>remoteAddress());
+    <span class="pl-k">return</span> promise<span class="pl-k">.</span>map(<span class="pl-k">new</span> <span class="pl-k">Function&lt;<span class="pl-smi">Geolocation</span>, <span class="pl-smi">Result</span>&gt;</span>() {
+      <span class="pl-c1">...</span>
+    });
   }
 }</pre></div>
 
 <h2>
 <a id="implement-your-own-geolocation-service-provider" class="anchor" href="#implement-your-own-geolocation-service-provider" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implement your own geolocation service provider</h2>
 
-<p>Out of the box, this plugins supports just Maxmind and Freegeoip, but you can add your own geolocation service provider implementation and everything will works as expected. To do that, just create an implementation of <code>com.edulify.modules.geolocation.GeolocationProvider</code> and then configure it:</p>
+<p>Out of the box, this plugins supports Freegeoip and Maxmind, but you can add your own geolocation service provider implementation and everything will works as expected. To do that, just create an implementation of <code>com.edulify.modules.geolocation.GeolocationProvider</code> and a <a href="https://www.playframework.com/documentation/2.4.x/Modules">Play Module</a> to configure it:</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-k">package</span> <span class="pl-smp">com.acme.geolocation</span>;
+<h4>
+<a id="the-geolocationprovider" class="anchor" href="#the-geolocationprovider" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code>GeolocationProvider</code>:</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">package</span> <span class="pl-smi">com.acme.geolocation</span>;
 
 <span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.Geolocation</span>;
 <span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.GeolocationProvider</span>;
@@ -237,20 +250,46 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 <span class="pl-k">import</span> <span class="pl-smi">play.libs.ws.WS</span>;
 <span class="pl-k">import</span> <span class="pl-smi">play.libs.ws.WSResponse</span>;
 
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">MyGeolocationProvider</span> <span class="pl-s">implements</span> <span class="pl-e">GeolocationProvider</span> {
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MyGeolocationProvider</span> <span class="pl-k">implements</span> <span class="pl-e">GeolocationProvider</span> {
 
-    <span class="pl-st">@Override</span>
-    <span class="pl-s">public</span> <span class="pl-stj">F</span>.<span class="pl-st">Promise&lt;<span class="pl-stj">Geolocation</span>&gt;</span> <span class="pl-en">get</span>(<span class="pl-stj">String</span> <span class="pl-v">ip</span>) {
-        <span class="pl-c">// Do a request to your geolocation service and </span>
+    <span class="pl-k">private</span> <span class="pl-smi">WSClient</span> ws;
+
+    <span class="pl-k">@Inject</span>
+    <span class="pl-k">public</span> <span class="pl-en">MyGeolocationProvider</span>(<span class="pl-smi">WSClient</span> <span class="pl-v">ws</span>) {
+        <span class="pl-v">this</span><span class="pl-k">.</span>ws <span class="pl-k">=</span> ws;
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">F</span>.<span class="pl-k">Promise&lt;<span class="pl-smi">Geolocation</span>&gt;</span> <span class="pl-en">get</span>(<span class="pl-smi">String</span> <span class="pl-v">ip</span>) {
+        <span class="pl-c">// Do a request to your geolocation service and</span>
         <span class="pl-c">// then return a Promise with a geolocation object</span>
     }
 }</pre></div>
 
+<h4>
+<a id="the-module" class="anchor" href="#the-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Module:</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">package</span> <span class="pl-smi">com.acme.geolocation</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">com.edulify.modules.geolocation.GeolocationProvider</span>;
+<span class="pl-k">import</span> <span class="pl-smi">com.google.inject.AbstractModule</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MyGeolocationModule</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractModule</span> {
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">configure</span>() {
+    <span class="pl-c">// bind to your own MyGeolocationProvider implementation</span>
+    bind(<span class="pl-smi">GeolocationProvider</span><span class="pl-k">.</span>class)<span class="pl-k">.</span>to(<span class="pl-smi">MyGeolocationProvider</span><span class="pl-k">.</span>class);
+  }
+}
+</pre></div>
+
 <p>After that, you just have to configure the provider:</p>
 
-<pre><code>geolocation {
-  provider = "com.acme.geolocation.MyGeolocationProvider"
-  timeout = 1s
+<pre><code># Configure your own module here
+play.modules.enabled += "com.acme.geolocation.MyGeolocationModule"
+
+geolocation {
   cache {
     on = true
     ttl = 10s
@@ -269,12 +308,32 @@ resolvers <span class="pl-k">++</span><span class="pl-k">=</span> <span class="p
 <li><a href="https://github.com/edulify/play-hikaricp.edulify.com">HikariCP Plugin</a></li>
 <li><a href="https://github.com/edulify/play-currency-converter-module.edulify.com">Currency Plugin</a></li>
 </ol>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright 2014 Edulify.com</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/edulify/play-geolocation-module.edulify.com">Play Geolocation Module</a> is maintained by <a href="https://github.com/edulify">edulify</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
+
+    </section>
+
+  
   </body>
 </html>
