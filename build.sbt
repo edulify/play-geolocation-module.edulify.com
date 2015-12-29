@@ -20,6 +20,8 @@ resolvers ++= Seq(
   Resolver.typesafeRepo("releases")
 )
 
+testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-q")
+
 organization := "com.edulify"
 
 organizationName := "Edulify.com"
