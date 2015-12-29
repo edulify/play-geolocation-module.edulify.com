@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function recommendations() {
+  echo "1. Use Java 1.8+"
+  echo "2. Use sbt 0.13.9+"
+  echo "3. Run the samples/java application to see an app that uses this module"
+  echo "4. Check .travis.yml to see which commands are used to build this module"
+  echo "------------------------------------------------------------------------"
+}
+
+function basic_setup() {
+  sbt clean compile test
+}
+
+recommendations
+basic_setup
