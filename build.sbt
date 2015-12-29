@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   javaCore,
   javaWs,
   cache,
-  "org.mockito" % "mockito-core" % "2.0.33-beta"
+  "org.mockito" % "mockito-core" % "2.0.33-beta" % Test,
+  "com.jayway.awaitility" % "awaitility" % "1.7.0" % Test
 )
 
 resolvers ++= Seq(
