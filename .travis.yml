@@ -4,7 +4,7 @@ scala:
    - 2.11.7
 script:
    - sbt ++$TRAVIS_SCALA_VERSION clean compile test publishLocal
-   - cd samples/java && sbt ++$TRAVIS_SCALA_VERSION clean compile test
+   - cd sample/java && sbt ++$TRAVIS_SCALA_VERSION clean compile test
 
 jdk:
    - oraclejdk8
