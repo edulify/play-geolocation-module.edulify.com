@@ -1,3 +1,17 @@
 .idea
 project
 target
+logs
+project/project
+project/target
+target
+tmp
+.history
+dist
+*.iml
+out
+.idea_modules
+.classpath
+.project
+RUNNING_PID
+.settings
