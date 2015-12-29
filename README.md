@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/edulify/play-geolocation-module.edulify.com.svg)](https://travis-ci.org/edulify/play-geolocation-module.edulify.com)
 
-This is a play module for IP based geolocation. Currently, the module supports use of one of the following service to retrieve the IP data:
+This is a play module for IP based [Geolocation](https://en.wikipedia.org/wiki/Geolocation). Currently, the module supports the following services to retrieve the IP data:
 
 #### [Freegeoip](http://freegeoip.net/)
 
@@ -13,6 +13,16 @@ This is a play module for IP based geolocation. Currently, the module supports u
 > Determine an Internet visitor's country based on their IP address.
 
 However, support to other geolocation services is possible using the API provided by this plugin.
+
+## Compatibility Matrix
+
+| Playframework version | Module version |
+|:----------------------|:---------------|
+| 2.4.x                 | 2.0.0          |
+| 2.3.x                 | 1.4.1          |
+| 2.3.x                 | 1.4.0          |
+| 2.3.x                 | 1.3.0          |
+| 2.3.x                 | 1.2.0          |
 
 ## How to use
 
@@ -33,8 +43,7 @@ libraryDependencies ++= Seq(
   // Add your project dependencies here,
   javaCore,
   javaJdbc,
-  javaEbean,
-  "com.edulify" %% "geolocation" % "1.4.1"
+  "com.edulify" %% "geolocation" % "2.0.0"
 )
 
 resolvers ++= Seq(
@@ -58,8 +67,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean,
-    "com.edulify" %% "geolocation" % "1.4.1"
+    "com.edulify" %% "geolocation" % "2.0.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -68,16 +76,21 @@ object ApplicationBuild extends Build {
   )
 
 }
-
 ```
 
-#### Add plugin class to your `project/play.plugins`:
+#### Enable the module in your `conf/application.conf`:
 
-Add the following line in your `play.plugins` file:
+Since there is support to Freegeoip and Maxmind, there is also two modules that you enable, depending on which one you want to use. To eanble the module, just add the following line to you `conf/application.conf` file:
 
-    1600:com.edulify.modules.geolocation.GeolocationPlugin
+```
+play.modules.enabled += "com.edulify.modules.geolocation.providers.FreegeoipModule"
+```
 
-Use a number greater than `1000` since [play reserves this number to its own plugins](https://playframework.com/documentation/2.3.x/ScalaPlugins).
+Or, in case you want to use Maxmind instead:
+
+```
+play.modules.enabled += "com.edulify.modules.geolocation.providers.MaxmindModule"
+```
 
 ## Configurations
 
@@ -85,20 +98,15 @@ This plugins offers the following configurations:
 
 | Configuration           | Description                             | Default           |
 |:------------------------|:----------------------------------------|:------------------|
-| `geolocation.provider`  | The geolocation provider implementation | `com.edulify.modules.geolocation.providers.FreegeoipProvider` |
 | `geolocation.cache.on`  | Caches geolocation results calls        | `false`           |
-| `geolocation.cache.ttl` | How long it should cache the results    | none              |
+| `geolocation.cache.ttl` | How long it should cache the results    | 5 seconds         |
 | `geolocation.enabled`   | If the plugin is enabled or not         | `true`            |
-| `geolocation.timeout`   | How long it should waits to retrieve the geolocation | `5s` |
 | `geolocation.maxmind.license` | Maxmind license                   | none              |
-
 
 Per instance, you can add the following in your `conf/application.conf`:
 
 ```
 geolocation {
-  provider = "com.edulify.modules.geolocation.providers.MaxmindProvider"
-  timeout = 1s
   cache {
     on = true
     ttl = 10s
@@ -107,25 +115,41 @@ geolocation {
 }
 ```
 
-Also, notice that the cache uses the cache support offered by Playframework.
+Also, notice that the cache uses the cache support offered by Playframework. A complete configuration can be found below:
 
+```
+play.modules.enabled += "com.edulify.modules.geolocation.providers.FreegeoipModule"
+
+geolocation {
+  cache {
+    on = true
+    ttl = 10s
+  }
+}
+```
 
 ## Code example
-
-Right now there is support to both async and sync geolocation calls, both using [the Play WS API](https://playframework.com/documentation/2.3.x/JavaWS). 
-
-### Async Example Code
 
 This is the expected way to use the plugin.
 
 ```java
+import javax.inject.Inject;
+
 import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.AsyncGeolocationService;
+import com.edulify.modules.geolocation.GeolocationService;
 
 public class Application {
+
+  private GeolocationService geolocationService;
+
+  @Inject
+  public Application(GeolocationService geolocationService) {
+    this.geolocationService = geolocationService;
+  }
+
   public static Result index() {
     ...
-    Promise<Geolocation> promise = AsyncGeolocationService.getGeolocation(request.remoteAddress());
+    Promise<Geolocation> promise = geolocationService.getGeolocation(request.remoteAddress());
     return promise.map(new Function<Geolocation, Result>() {
       ...
     });
@@ -133,26 +157,11 @@ public class Application {
 }
 ```
 
-### Sync Example code (DEPRECATED):
-
-This will be removed in a future release and it is exists just to keep compatibility.
-
-```java
-import com.edulify.modules.geolocation.Geolocation;
-import com.edulify.modules.geolocation.GeolocationService;
-
-public class Application {
-  public static Result index() {
-    ...
-    Geolocation geolocation = GeolocationService.getGeolocation(request.remoteAddress());
-    return ok(viewGeolocation.render(geolocation));
-  }
-}
-```
-
 ## Implement your own geolocation service provider
 
-Out of the box, this plugins supports just Maxmind and Freegeoip, but you can add your own geolocation service provider implementation and everything will works as expected. To do that, just create an implementation of `com.edulify.modules.geolocation.GeolocationProvider` and then configure it:
+Out of the box, this plugins supports Freegeoip and Maxmind, but you can add your own geolocation service provider implementation and everything will works as expected. To do that, just create an implementation of `com.edulify.modules.geolocation.GeolocationProvider` and a [Play Module](https://www.playframework.com/documentation/2.4.x/Modules) to configure it:
+
+#### The `GeolocationProvider`:
 
 ```java
 package com.acme.geolocation;
@@ -165,20 +174,47 @@ import play.libs.ws.WSResponse;
 
 public class MyGeolocationProvider implements GeolocationProvider {
 
+    private WSClient ws;
+
+    @Inject
+    public MyGeolocationProvider(WSClient ws) {
+        this.ws = ws;
+    }
+
     @Override
     public F.Promise<Geolocation> get(String ip) {
-        // Do a request to your geolocation service and 
+        // Do a request to your geolocation service and
         // then return a Promise with a geolocation object
     }
 }
 ```
 
+#### The Module:
+
+```java
+package com.acme.geolocation;
+
+import com.edulify.modules.geolocation.GeolocationProvider;
+import com.google.inject.AbstractModule;
+
+public class MyGeolocationModule extends AbstractModule {
+
+  @Override
+  protected void configure() {
+    // bind to your own MyGeolocationProvider implementation
+    bind(GeolocationProvider.class).to(MyGeolocationProvider.class);
+  }
+}
+
+```
+
 After that, you just have to configure the provider:
 
 ```
+# Configure your own module here
+play.modules.enabled += "com.acme.geolocation.MyGeolocationModule"
+
 geolocation {
-  provider = "com.acme.geolocation.MyGeolocationProvider"
-  timeout = 1s
   cache {
     on = true
     ttl = 10s
