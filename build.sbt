@@ -9,7 +9,10 @@ crossScalaVersions := Seq("2.10.6", "2.11.7")
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 libraryDependencies ++= Seq(
-  javaCore, javaWs, cache
+  javaCore,
+  javaWs,
+  cache,
+  "org.mockito" % "mockito-core" % "2.0.33-beta"
 )
 
 resolvers ++= Seq(
