@@ -2,7 +2,9 @@ package com.edulify.modules.geolocation;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Geolocation {
+import java.io.Serializable;
+
+public class Geolocation implements Serializable {
 
   private String ip;
   private String countryCode;
@@ -31,7 +33,7 @@ public class Geolocation {
     this.regionName  = regionName;
     this.city        = city;
   }
-  
+
   public Geolocation(String ip,
                      String countryCode,
                      String countryName,
@@ -46,7 +48,7 @@ public class Geolocation {
     this.longitude   = longitude;
     this.timeZone    = timeZone;
   }
-  
+
   public static Geolocation empty() {
     return new Geolocation(
         "", // ip

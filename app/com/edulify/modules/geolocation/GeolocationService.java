@@ -1,14 +1,26 @@
 package com.edulify.modules.geolocation;
 
-/**
- * @deprecated Use AsyncGeolocationService instead
- */
-@Deprecated
-public class GeolocationService {
+import play.libs.F;
 
-  private static final long timeout = Config.getMillisecondsOr("geolocation.timeout", 5000);
+import javax.inject.Inject;
 
-  public static Geolocation getGeolocation(String ip) {
-    return AsyncGeolocationService.getGeolocation(ip).get(timeout);
+public final class GeolocationService {
+
+  private GeolocationProvider provider;
+  private GeolocationCache cache;
+
+  @Inject
+  public GeolocationService(GeolocationProvider provider, GeolocationCache cache) {
+    this.provider = provider;
+    this.cache = cache;
+  }
+
+  public F.Promise<Geolocation> getGeolocation(String ip) {
+    Geolocation geolocation = cache.get(ip);
+    if (geolocation != null) return F.Promise.pure(geolocation);
+
+    F.Promise<Geolocation> promise = provider.get(ip);
+    promise.onRedeem(gl -> cache.set(gl));
+    return promise;
   }
 }

@@ -1,34 +1,61 @@
 package com.edulify.modules.geolocation;
 
-import org.junit.Test;
+import org.junit.*;
+import org.hamcrest.*;
+import org.mockito.Mockito;
+
+import play.*;
+import play.libs.F;
 import play.test.WithApplication;
+import play.inject.guice.GuiceApplicationBuilder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static play.test.Helpers.*;
+import static com.jayway.awaitility.Awaitility.*;
+import static play.inject.Bindings.bind;
 
-/**
- * Created by sovaalexandr
- */
 public class GeolocationServiceTest extends WithApplication {
 
+  private final String ipAddress = "192.30.252.129";
+  private final String countryCode = "BR";
+
+  @Override
+  public Application provideApplication() {
+    Geolocation geolocation = new Geolocation(ipAddress, countryCode);
+
+    GeolocationProvider provider = Mockito.mock(GeolocationProvider.class);
+    Mockito.when(provider.get(ipAddress)).thenReturn(F.Promise.pure(geolocation));
+
+    return new GuiceApplicationBuilder()
+      .in(new File("."))
+      .in(Mode.TEST)
+      .configure("geolocation.cache.on", true)
+      .bindings(bind(GeolocationProvider.class).toInstance(provider))
+      .build();
+  }
+
   @Test
-  public void testGetGeolocation() throws Exception {
-    Map<String, Object> config = new HashMap<>(1);
-    config.put("geolocation.provider", "com.edulify.modules.geolocation.providers.FreegeoipProvider");
-    List<String> plugins = new ArrayList<>(1);
-    plugins.add(GeolocationPlugin.class.getCanonicalName());
-    running(fakeApplication(config, plugins), new Runnable() {
-      @Override
-      public void run() {
-        String ipAddress = "192.30.252.129";
-        Geolocation geolocation = GeolocationService.getGeolocation(ipAddress);
-        assertEquals(ipAddress, geolocation.getIp());
-      }
+  public void shouldGetAGeolocationForAGivenIp() throws Exception {
+    GeolocationService service = app.injector().instanceOf(GeolocationService.class);
+    Geolocation geolocation = service.getGeolocation(ipAddress).get(1, TimeUnit.SECONDS);
+
+    Assert.assertThat(geolocation.getIp(), CoreMatchers.equalTo(ipAddress));
+    Assert.assertThat(geolocation.getCountryCode(), CoreMatchers.equalTo(countryCode));
+  }
+
+  @Test
+  public void shouldSetAGeolocationCache() throws InterruptedException {
+    GeolocationService service = app.injector().instanceOf(GeolocationService.class);
+    GeolocationCache cache = app.injector().instanceOf(GeolocationCache.class);
+
+    F.Promise<Geolocation> promise = service.getGeolocation(ipAddress);
+
+    await().atMost(5, TimeUnit.SECONDS).until(() -> {
+      return promise.wrapped().isCompleted();
     });
+
+    Geolocation geolocation = cache.get(ipAddress);
+    Assert.assertThat(geolocation, CoreMatchers.notNullValue());
   }
 }

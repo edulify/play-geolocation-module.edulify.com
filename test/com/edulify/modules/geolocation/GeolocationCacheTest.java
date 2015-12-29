@@ -1,37 +1,48 @@
 package com.edulify.modules.geolocation;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import play.test.WithApplication;
+import play.Application;
+import play.test.Helpers;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.when;
-import static play.test.Helpers.*;
-import static org.junit.Assert.*;
+public class GeolocationCacheTest {
 
-/**
- * Created by sovaalexandr
- */
-@RunWith(MockitoJUnitRunner.class)
-public class GeolocationCacheTest extends WithApplication {
-  @Mock
-  private Geolocation mockGeolocation;
+  private final String ipAddress = "192.30.252.129";
+  private final String countryCode = "BR";
+
   @Test
-  public void testSetGet() throws Exception {
-    Map<String, Object> configMap = new HashMap<>(1);
-    configMap.put("geolocation.cache.on", true);
-    running(fakeApplication(configMap), new Runnable() {
-      @Override
-      public void run() {
-        String ipAddress = "192.168.0.1";
-        when(mockGeolocation.getIp()).thenReturn(ipAddress);
-        GeolocationCache.set(mockGeolocation);
-        assertSame(mockGeolocation, GeolocationCache.get(ipAddress));
-      }
+  public void shouldAddGeolocationToCacheWhenCacheIsOn() {
+    Application application = getApplication(true);
+
+    Helpers.running(application, () -> {
+      Geolocation geolocation = new Geolocation(ipAddress, countryCode);
+      GeolocationCache cache = application.injector().instanceOf(GeolocationCache.class);
+
+      cache.set(geolocation);
+      Assert.assertThat(cache.get(ipAddress), CoreMatchers.notNullValue());
     });
+  }
+
+  @Test
+  public void shouldNotAddGeolocationToCacheWhenCacheIsOff() {
+    Application application = getApplication(false);
+
+    Helpers.running(application, () -> {
+      Geolocation geolocation = new Geolocation(ipAddress, countryCode);
+      GeolocationCache cache = application.injector().instanceOf(GeolocationCache.class);
+
+      cache.set(geolocation);
+      Assert.assertThat(cache.get(ipAddress), CoreMatchers.nullValue());
+    });
+  }
+
+  private Application getApplication(boolean cacheOn) {
+    Map<String, Object> config = new HashMap<>();
+    config.put("geolocation.cache.on", cacheOn);
+    return Helpers.fakeApplication(config);
   }
 }

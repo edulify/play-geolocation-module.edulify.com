@@ -4,33 +4,37 @@ import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.F;
-import play.libs.ws.WS;
-import play.libs.ws.WSResponse;
+import play.libs.ws.WSClient;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class FreegeoipProvider implements GeolocationProvider {
-  
+
+  private WSClient ws;
+
+  @Inject
+  public FreegeoipProvider(WSClient ws) {
+    this.ws = ws;
+  }
+
   @Override
   public F.Promise<Geolocation> get(String ip) {
     String url = String.format("http://freegeoip.net/json/%s", ip);
-    return WS.url(url)
+    return ws.url(url)
         .get()
-        .map(new F.Function<WSResponse, JsonNode>() {
-          @Override
-          public JsonNode apply(WSResponse response) throws Throwable {
-            if (response.getStatus() != 200) return null;
-            if (response.getBody().contains("not found")) return null;
-            return response.asJson();
-          }
+        .map(response -> {
+          if (response.getStatus() != 200) return null;
+          if (response.getBody().contains("not found")) return null;
+          return response.asJson();
         })
-        .map(new F.Function<JsonNode, Geolocation>() {
-          @Override
-          public Geolocation apply(JsonNode json) throws Throwable {
-            if (json == null) return Geolocation.empty();
-            return asGeolocation(json);
-          }
+        .map(json -> {
+          if (json == null) return Geolocation.empty();
+          return asGeolocation(json);
         });
   }
-  
+
   private Geolocation asGeolocation(JsonNode json) {
     JsonNode jsonIp          = json.get("ip");
     JsonNode jsonCountryCode = json.get("country_code");
