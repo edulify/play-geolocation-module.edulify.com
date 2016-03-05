@@ -1,11 +1,11 @@
 package com.edulify.modules.geolocation;
 
-import play.libs.F;
+import java.util.concurrent.CompletionStage;
 
 public interface GeolocationProvider {
 
   /**
    * Get the geolocation to a given ip
    */
-  F.Promise<Geolocation> get(String ip);
+  CompletionStage<Geolocation> get(String ip);
 }

@@ -5,11 +5,12 @@ import org.hamcrest.*;
 import org.mockito.Mockito;
 
 import play.*;
-import play.libs.F;
 import play.test.WithApplication;
 import play.inject.guice.GuiceApplicationBuilder;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
 import static com.jayway.awaitility.Awaitility.*;
@@ -25,7 +26,7 @@ public class GeolocationServiceTest extends WithApplication {
     Geolocation geolocation = new Geolocation(ipAddress, countryCode);
 
     GeolocationProvider provider = Mockito.mock(GeolocationProvider.class);
-    Mockito.when(provider.get(ipAddress)).thenReturn(F.Promise.pure(geolocation));
+    Mockito.when(provider.get(ipAddress)).thenReturn(CompletableFuture.completedFuture(geolocation));
 
     return new GuiceApplicationBuilder()
       .in(new File("."))
@@ -38,7 +39,7 @@ public class GeolocationServiceTest extends WithApplication {
   @Test
   public void shouldGetAGeolocationForAGivenIp() throws Exception {
     GeolocationService service = app.injector().instanceOf(GeolocationService.class);
-    Geolocation geolocation = service.getGeolocation(ipAddress).get(1, TimeUnit.SECONDS);
+    Geolocation geolocation = service.getGeolocation(ipAddress).toCompletableFuture().get(1, TimeUnit.SECONDS);
 
     Assert.assertThat(geolocation.getIp(), CoreMatchers.equalTo(ipAddress));
     Assert.assertThat(geolocation.getCountryCode(), CoreMatchers.equalTo(countryCode));
@@ -49,10 +50,10 @@ public class GeolocationServiceTest extends WithApplication {
     GeolocationService service = app.injector().instanceOf(GeolocationService.class);
     GeolocationCache cache = app.injector().instanceOf(GeolocationCache.class);
 
-    F.Promise<Geolocation> promise = service.getGeolocation(ipAddress);
+    CompletionStage<Geolocation> promise = service.getGeolocation(ipAddress);
 
     await().atMost(5, TimeUnit.SECONDS).until(() -> {
-      return promise.wrapped().isCompleted();
+      return promise.toCompletableFuture().isDone();
     });
 
     Geolocation geolocation = cache.get(ipAddress);

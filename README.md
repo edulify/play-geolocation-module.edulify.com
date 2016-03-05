@@ -18,6 +18,7 @@ However, support to other geolocation services is possible using the API provide
 
 | Playframework version | Module version |
 |:----------------------|:---------------|
+| 2.5.x                 | 2.1.0          |
 | 2.4.x                 | 2.0.0          |
 | 2.3.x                 | 1.4.1          |
 | 2.3.x                 | 1.4.0          |
@@ -37,13 +38,13 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
   // Add your project dependencies here,
   javaCore,
   javaJdbc,
-  "com.edulify" %% "geolocation" % "2.0.0"
+  "com.edulify" %% "geolocation" % "2.1.0"
 )
 
 resolvers ++= Seq(
@@ -67,7 +68,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    "com.edulify" %% "geolocation" % "2.0.0"
+    "com.edulify" %% "geolocation" % "2.1.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -135,10 +136,16 @@ This is the expected way to use the plugin.
 ```java
 import javax.inject.Inject;
 
+import play.mvc.Result;
+import play.mvc.Controller;
+import play.libs.concurrent.HttpExecution;
+
+import java.util.concurrent.CompletionStage;
+
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationService;
 
-public class Application {
+public class Application extends Controller {
 
   private GeolocationService geolocationService;
 
@@ -147,12 +154,12 @@ public class Application {
     this.geolocationService = geolocationService;
   }
 
-  public static Result index() {
+  public static CompletionStage<Result> index() {
     ...
-    Promise<Geolocation> promise = geolocationService.getGeolocation(request.remoteAddress());
-    return promise.map(new Function<Geolocation, Result>() {
-      ...
-    });
+    geolocationService.getGeolocation(request.remoteAddress())
+      .thenApplyAsync(new Function<Geolocation, Result>() {
+        ...
+      }, HttpExecution.defaultContext());
   }
 }
 ```
@@ -168,9 +175,6 @@ package com.acme.geolocation;
 
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationProvider;
-import play.libs.F;
-import play.libs.ws.WS;
-import play.libs.ws.WSResponse;
 
 public class MyGeolocationProvider implements GeolocationProvider {
 
@@ -182,7 +186,7 @@ public class MyGeolocationProvider implements GeolocationProvider {
     }
 
     @Override
-    public F.Promise<Geolocation> get(String ip) {
+    public CompletionStage<Geolocation> get(String ip) {
         // Do a request to your geolocation service and
         // then return a Promise with a geolocation object
     }

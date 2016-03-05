@@ -1,6 +1,6 @@
 name := "geolocation"
 
-version := "2.0.0"
+version := "2.1.0"
 
 scalaVersion := "2.11.7"
 
@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   javaCore,
   javaWs,
   cache,
-  "org.mockito" % "mockito-core" % "2.0.33-beta" % Test,
+  "org.mockito" % "mockito-core" % "2.0.43-beta" % Test,
   "com.jayway.awaitility" % "awaitility" % "1.7.0" % Test
 )
 

@@ -3,11 +3,12 @@ package com.edulify.modules.geolocation.providers;
 import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationProvider;
 import com.fasterxml.jackson.databind.JsonNode;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.libs.ws.WSClient;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletionStage;
 
 @Singleton
 public class FreegeoipProvider implements GeolocationProvider {
@@ -20,19 +21,19 @@ public class FreegeoipProvider implements GeolocationProvider {
   }
 
   @Override
-  public F.Promise<Geolocation> get(String ip) {
+  public CompletionStage<Geolocation> get(String ip) {
     String url = String.format("http://freegeoip.net/json/%s", ip);
     return ws.url(url)
         .get()
-        .map(response -> {
+        .thenApplyAsync(response -> {
           if (response.getStatus() != 200) return null;
           if (response.getBody().contains("not found")) return null;
           return response.asJson();
-        })
-        .map(json -> {
+        }, HttpExecution.defaultContext())
+        .thenApplyAsync(json -> {
           if (json == null) return Geolocation.empty();
           return asGeolocation(json);
-        });
+        }, HttpExecution.defaultContext());
   }
 
   private Geolocation asGeolocation(JsonNode json) {

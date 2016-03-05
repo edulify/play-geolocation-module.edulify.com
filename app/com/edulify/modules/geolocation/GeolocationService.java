@@ -1,8 +1,10 @@
 package com.edulify.modules.geolocation;
 
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public final class GeolocationService {
 
@@ -15,12 +17,12 @@ public final class GeolocationService {
     this.cache = cache;
   }
 
-  public F.Promise<Geolocation> getGeolocation(String ip) {
+  public CompletionStage<Geolocation> getGeolocation(String ip) {
     Geolocation geolocation = cache.get(ip);
-    if (geolocation != null) return F.Promise.pure(geolocation);
+    if (geolocation != null) return CompletableFuture.completedFuture(geolocation);
 
-    F.Promise<Geolocation> promise = provider.get(ip);
-    promise.onRedeem(gl -> cache.set(gl));
+    CompletionStage<Geolocation> promise = provider.get(ip);
+    promise.thenAcceptAsync(gl -> cache.set(gl), HttpExecution.defaultContext());
     return promise;
   }
 }
