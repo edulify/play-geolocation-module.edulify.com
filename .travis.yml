@@ -1,7 +1,4 @@
 language: scala
-scala:
-   - 2.10.6
-   - 2.11.7
 script:
    - sbt ++$TRAVIS_SCALA_VERSION clean compile test publishLocal
    - cd sample/java && sbt ++$TRAVIS_SCALA_VERSION clean compile test
