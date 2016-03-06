@@ -1,7 +1,7 @@
 language: scala
 script:
-   - sbt ++$TRAVIS_SCALA_VERSION clean compile test publishLocal
-   - cd sample/java && sbt ++$TRAVIS_SCALA_VERSION clean compile test
+   - sbt clean compile test publishLocal
+   - cd sample/java && sbt clean compile test
 
 jdk:
    - oraclejdk8
