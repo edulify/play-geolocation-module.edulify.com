@@ -48,26 +48,25 @@ licenses := Seq("The Apache Software License, Version 2.0" -> url("http://www.ap
 
 homepage := Some(url("http://edulify.github.io/play-geolocation-module.edulify.com/"))
 
-pomExtra := (
+pomExtra :=
   <scm>
     <url>https://github.com/edulify/play-geolocation-module.edulify.com</url>
     <connection>scm:git:git@github.com:edulify/play-geolocation-module.edulify.com.git</connection>
     <developerConnection>scm:git:https://github.com/edulify/play-geolocation-module.edulify.com.git</developerConnection>
   </scm>
-    <developers>
-      <developer>
-        <id>megazord</id>
-        <name>Megazord</name>
-        <email>contact [at] edulify.com</email>
-        <url>https://github.com/megazord</url>
-      </developer>
-      <developer>
-        <id>ranierivalenca</id>
-        <name>Ranieri Valença</name>
-        <email>ranierivalenca [at] edulify.com</email>
-        <url>https://github.com/ranierivalenca</url>
-      </developer>
-    </developers>
-  )
+  <developers>
+    <developer>
+      <id>megazord</id>
+      <name>Megazord</name>
+      <email>contact [at] edulify.com</email>
+      <url>https://github.com/megazord</url>
+    </developer>
+    <developer>
+      <id>ranierivalenca</id>
+      <name>Ranieri Valença</name>
+      <email>ranierivalenca [at] edulify.com</email>
+      <url>https://github.com/ranierivalenca</url>
+    </developer>
+  </developers>
 
 scalacOptions := Seq("-feature", "-deprecation")

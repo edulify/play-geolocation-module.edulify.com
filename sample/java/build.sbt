@@ -11,10 +11,9 @@ routesGenerator := InjectedRoutesGenerator
 libraryDependencies ++= Seq(
   // Add your project dependencies here,
   javaCore,
-  javaJdbc,
-  "com.edulify" %% "geolocation" % "2.0.0-SNAPSHOT"
+  "com.edulify" %% "geolocation" % "2.1.0"
 )
 
 resolvers ++= Seq(
-  Resolver.url("Edulify Repository", url("https://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
+  Resolver.typesafeRepo("releases")
 )
