@@ -15,5 +15,5 @@ libraryDependencies ++= Seq(
 )
 
 resolvers ++= Seq(
-  Resolver.typesafeRepo("releases")
+  Resolver.url("Edulify Repository", url("https://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
 )
