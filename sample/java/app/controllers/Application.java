@@ -43,13 +43,11 @@ public class Application extends Controller {
         .thenApplyAsync(geolocation -> ok(geoData.render(geolocation, formHeader(geolocation, addr))));
   }
 
-  private String formHeader(Geolocation geolocation, String addr)
-  {
+  private String formHeader(Geolocation geolocation, String addr) {
     return formHeader(geolocation, addr, Geolocation::getCountryCode);
   }
 
-  private String formHeader(Geolocation geolocation, String addr, Function<Geolocation, String> propertyAccessor)
-  {
+  private String formHeader(Geolocation geolocation, String addr, Function<Geolocation, String> propertyAccessor) {
     return ofNullable(geolocation).flatMap(location -> ofNullable(propertyAccessor.apply(location)))
                            .map(countryCode -> format("This ip comes from %s", countryCode))
                            .orElseGet(() -> "Sorry, no data for ip: " + addr);

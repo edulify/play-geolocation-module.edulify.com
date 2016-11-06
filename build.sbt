@@ -14,10 +14,6 @@ libraryDependencies ++= Seq(
   "com.jayway.awaitility" % "awaitility" % "1.7.0" % Test
 )
 
-resolvers ++= Seq(
-  Resolver.typesafeRepo("releases")
-)
-
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-q")
 
 organization := "com.edulify"
@@ -33,11 +29,10 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 publishTo := {
-  val nexus = "https://oss.sonatype.org/"
   if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+    Some(Resolver.sonatypeRepo("snapshots"))
   else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
 startYear := Some(2013)
