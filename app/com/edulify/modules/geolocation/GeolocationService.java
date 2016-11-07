@@ -22,7 +22,7 @@ public final class GeolocationService {
     if (geolocation != null) return CompletableFuture.completedFuture(geolocation);
 
     CompletionStage<Geolocation> promise = provider.get(ip);
-    promise.thenAcceptAsync(gl -> cache.set(gl), HttpExecution.defaultContext());
+    promise.thenAcceptAsync(cache::set, HttpExecution.defaultContext());
     return promise;
   }
 }

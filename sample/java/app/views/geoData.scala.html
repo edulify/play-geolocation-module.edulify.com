@@ -1,7 +1,6 @@
-@(location: com.edulify.modules.geolocation.Geolocation)
+@(location: com.edulify.modules.geolocation.Geolocation, header: String)
 
-<html>
-  <body>
+  @main(header) {
     @if(location != null) {
       <h2>data for @location.getIp</h2>
       <ul>
@@ -16,5 +15,4 @@
         <li><strong>timezone:</strong> @location.getTimeZone</li>
       </ul>
     }
-  </body>
-</html>
+  }

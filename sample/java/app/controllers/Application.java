@@ -1,15 +1,19 @@
 package controllers;
 
-import play.*;
+import com.edulify.modules.geolocation.Geolocation;
 import play.mvc.*;
-import play.libs.F;
 
 import views.html.*;
 
 import javax.inject.Inject;
 
-import com.edulify.modules.geolocation.Geolocation;
 import com.edulify.modules.geolocation.GeolocationService;
+
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+
+import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 
 public class Application extends Controller {
 
@@ -24,39 +28,28 @@ public class Application extends Controller {
     return ok(index.render("Your new application is ready."));
   }
 
-  public F.Promise<Result> getCountry(final String addr) {
-    return this.geolocationService.getGeolocation(addr)
-        .map(new F.Function<Geolocation, Result>() {
-          public Result apply(Geolocation geolocation) {
-            String country = geolocation.getCountryName();
-            String message = country != null ? String.format("This ip comes from %s", country) :
-                "Sorry, we couldn't connect to the webservice";
-            return ok(index.render(message));
-          }
-        });
+  public CompletionStage<Result> getCountry(final String addr) {
+    return geolocationService.getGeolocation(addr)
+                             .thenApplyAsync(geolocation -> ok(index.render(formHeader(geolocation, addr, Geolocation::getCountryName))));
   }
 
-  public F.Promise<Result> getCountryCode(final String addr) {
-    return this.geolocationService.getGeolocation(addr)
-        .map(new F.Function<Geolocation, Result>() {
-          public Result apply(Geolocation geolocation) {
-            String countryCode = geolocation.getCountryCode();
-            String message = countryCode != null ? String.format("This ip comes from %s", countryCode) :
-                "Sorry, we couldn't connect to the webservice";
-            return ok(index.render(message));
-          }
-        });
+  public CompletionStage<Result> getCountryCode(final String addr) {
+    return geolocationService.getGeolocation(addr)
+        .thenApplyAsync(geolocation -> ok(index.render(formHeader(geolocation, addr))));
   }
 
-  public F.Promise<Result> getGeolocation(final String addr) {
-    return this.geolocationService.getGeolocation(addr)
-        .map(new F.Function<Geolocation, Result>() {
-          public Result apply(Geolocation geolocation) {
-            String countryCode = geolocation.getCountryCode();
-            String message = countryCode != null ? String.format("This ip comes from %s", countryCode) :
-                "Sorry, we couldn't connect to the webservice";
-            return ok(geoData.render(geolocation));
-          }
-        });
+  public CompletionStage<Result> getGeolocation(final String addr) {
+    return geolocationService.getGeolocation(addr)
+        .thenApplyAsync(geolocation -> ok(geoData.render(geolocation, formHeader(geolocation, addr))));
+  }
+
+  private String formHeader(Geolocation geolocation, String addr) {
+    return formHeader(geolocation, addr, Geolocation::getCountryCode);
+  }
+
+  private String formHeader(Geolocation geolocation, String addr, Function<Geolocation, String> propertyAccessor) {
+    return ofNullable(geolocation).flatMap(location -> ofNullable(propertyAccessor.apply(location)))
+                           .map(countryCode -> format("This ip comes from %s", countryCode))
+                           .orElseGet(() -> "Sorry, no data for ip: " + addr);
   }
 }
